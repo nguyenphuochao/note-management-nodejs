@@ -1,0 +1,24 @@
+{
+  "name": "note-management-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/nguyenphuochao/note-management-nodejs#readme",
+  "bugs": {
+    "url": "https://github.com/nguyenphuochao/note-management-nodejs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyenphuochao/note-management-nodejs.git"
+  },
+  "license": "ISC",
+  "author": "HaoNP",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {}
+}
