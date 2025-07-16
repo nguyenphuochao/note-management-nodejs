@@ -3,10 +3,15 @@ const path = require('path');
 const { engine } =  require('express-handlebars')
 const app = express()
 
+// connect db
+const db = require('./config/connectDB')
+
 // view engine handlebars
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './src/views');
+
+db.connectDB() // kết nối DB
 
 app.use(express.static(path.join(__dirname, 'public')));
 

@@ -6,12 +6,12 @@ class NoteController {
 
     // [GET] /note/create
     create(req, res) {
-        res.send('create')
+        res.render('notes/create')
     }
 
     // [POST] /note/store
     store(req, res) {
-        res.send('store')
+        res.json(req.body)
     }
 
     // [GET] /note/edit

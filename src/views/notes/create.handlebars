@@ -1,0 +1,28 @@
+<div class="mt-5">
+    <h2>Thêm ghi chú</h2>
+
+    <form action="/notes/store" method="POST">
+        <div class="form-group">
+            <label for="name">Tên ghi chú</label>
+            <input type="text" class="form-control" id="name" placeholder="Nhập tên ghi chú">
+        </div>
+
+        <div class="form-group">
+            <label for="desciption">Mô tả</label>
+            <textarea rows="10" class="form-control" name="desciption" id="desciption" placeholder="Mô tả ghi chú"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="category">Danh mục</label>
+            <select name="category" id="category" class="form-control">
+                <option value="không có">Không có</option>
+            </select>
+        </div>
+
+        <div class="form-group actions">
+            <button class="btn btn-primary btn-sm">Lưu</button>
+            <a href="/notes" class="btn btn-warning btn-sm">Quay về</a>
+        </div>
+
+    </form>
+</div>
