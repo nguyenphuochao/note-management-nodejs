@@ -7,9 +7,9 @@ async function connectDB() {
             useUnifiedTopology: true
         });
 
-        console.log('Kết nối thành công');
+        console.log('Connect successfully');
     } catch (error) {
-        console.log('Kết nối thất bại');
+        console.log('Connect failed');
     }
 }
 

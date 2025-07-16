@@ -7,7 +7,7 @@ class NoteController {
         Note.find({})
             .then(notes => {
                 res.render('notes/index', {
-                    notes : mutipleMongooseToObject(notes)
+                    notes: mutipleMongooseToObject(notes)
                 })
             })
             .catch(next)
@@ -20,7 +20,10 @@ class NoteController {
 
     // [POST] /note/store
     store(req, res) {
-        res.json(req.body)
+        const note = new Note(req.body)
+        note.save()
+            .then(() => res.redirect('/notes'))
+            .catch(err => console.log(err))
     }
 
     // [GET] /note/edit

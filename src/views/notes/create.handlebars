@@ -4,17 +4,17 @@
     <form action="/notes/store" method="POST">
         <div class="form-group">
             <label for="name">Tên ghi chú</label>
-            <input type="text" class="form-control" id="name" placeholder="Nhập tên ghi chú">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên ghi chú" required>
         </div>
 
         <div class="form-group">
-            <label for="desciption">Mô tả</label>
-            <textarea rows="10" class="form-control" name="desciption" id="desciption" placeholder="Mô tả ghi chú"></textarea>
+            <label for="description">Mô tả</label>
+            <textarea rows="10" class="form-control" name="description" id="description" placeholder="Mô tả ghi chú"></textarea>
         </div>
         
         <div class="form-group">
-            <label for="category">Danh mục</label>
-            <select name="category" id="category" class="form-control">
+            <label for="category_id">Danh mục</label>
+            <select name="category_id" id="category_id" class="form-control">
                 <option value="không có">Không có</option>
             </select>
         </div>
