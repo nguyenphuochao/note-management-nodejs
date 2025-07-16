@@ -5,6 +5,8 @@ const app = express()
 
 // connect db
 const db = require('./config/connectDB')
+// route
+const route = require('./routes')
 
 // view engine handlebars
 app.engine('handlebars', engine());
@@ -23,15 +25,7 @@ app.get('/', function (req, res) {
     res.redirect('/notes')
 });
 
-// Notes
-app.get('/notes', NoteController.index)
-app.get('/notes/create', NoteController.create)
-app.post('/notes/store', NoteController.store)
-app.get('/notes/edit', NoteController.edit)
-app.put('/notes/update', NoteController.update)
-app.delete('/notes/destroy', NoteController.destroy)
-
-// Categories
+route(app)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

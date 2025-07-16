@@ -1,7 +1,16 @@
+const Note = require('../models/Note')
+const { mutipleMongooseToObject } = require('../util/mongoose')
+
 class NoteController {
     // [GET] /note/index
-    index(req, res) {
-        res.render('notes/index')
+    index(req, res, next) {
+        Note.find({})
+            .then(notes => {
+                res.render('notes/index', {
+                    notes : mutipleMongooseToObject(notes)
+                })
+            })
+            .catch(next)
     }
 
     // [GET] /note/create
