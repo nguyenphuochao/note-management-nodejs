@@ -4,7 +4,13 @@ const { mutipleMongooseToObject } = require('../util/mongoose')
 class NoteController {
     // [GET] /note/index
     index(req, res, next) {
-        Note.find({})
+        const searchQuery = Note.find({});
+
+        // if (req.query.hasOwnProperty('name')) {
+
+        // }
+
+        searchQuery
             .then(notes => {
                 res.render('notes/index', {
                     notes: mutipleMongooseToObject(notes)
