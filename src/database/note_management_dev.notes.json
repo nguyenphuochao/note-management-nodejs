@@ -1,0 +1,70 @@
+[{
+  "_id": {
+    "$oid": "68779bc9752895c8fb07f61e"
+  },
+  "name": "Ăn cơm",
+  "description": "Hôm nay ăn cơm trưa 12h",
+  "createdAt": {
+    "$date": "2025-07-16T12:32:09.744Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-16T12:32:09.744Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68779d3e2c256bb71f5e7a9f"
+  },
+  "name": "Rửa chen",
+  "description": "Hôm nay nhớ rửa chén nha",
+  "createdAt": {
+    "$date": "2025-07-16T12:38:22.388Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-16T12:38:22.388Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68779d4e2c256bb71f5e7aa2"
+  },
+  "name": "Lịch học",
+  "description": "Hôm nay học thêm 18h",
+  "createdAt": {
+    "$date": "2025-07-16T12:38:38.395Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-16T12:38:38.395Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68779d682c256bb71f5e7aa5"
+  },
+  "name": "Học lập trình web",
+  "description": "Hôm nay học lập trình web từ 19h - 23h",
+  "createdAt": {
+    "$date": "2025-07-16T12:39:04.786Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-16T12:39:04.786Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68779d7b2c256bb71f5e7aa8"
+  },
+  "name": "Account FB",
+  "description": "username : abc\r\npassword: 123",
+  "createdAt": {
+    "$date": "2025-07-16T12:39:23.480Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-16T12:39:23.480Z"
+  },
+  "__v": 0
+}]

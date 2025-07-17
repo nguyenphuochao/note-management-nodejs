@@ -5,7 +5,7 @@ const RegisterController = require('../controllers/RegisterController')
 module.exports = function route(app) {
     // rediect default
     app.get('/', function(req, res) {
-        res.rediect('/notes')
+        res.redirect('/notes')
     })
 
     // login

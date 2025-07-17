@@ -5,7 +5,6 @@ const app = express()
 
 const db = require('./config/connectDB') // connect db
 const route = require('./routes') // get route
-const vnFullFormat = require('./util/mongoose')
 
 // view engine handlebars
 app.engine('handlebars', engine({
