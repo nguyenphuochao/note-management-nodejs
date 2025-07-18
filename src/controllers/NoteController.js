@@ -31,7 +31,6 @@ class NoteController {
 
         if (Object.hasOwn(req.query, 's_createdAtFrom') && s_createdAtFrom != '') {
             const createdAtFrom = new Date(s_createdAtFrom + 'T00:00:00.000Z').toISOString()
-            console.log(createdAtFrom >= "2025-07-15T00:00:00.000Z"); // fix later
             searchQuery = searchQuery.find({
                 createdAt: { $gte: createdAtFrom }
             })
