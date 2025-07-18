@@ -10,17 +10,16 @@
         <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
     </button>
 
-    <form class="form-search" style="display: none;">
+    <form class="form-search" style="display: {{is_dislay_search}}">
         <div class="row mt-3">
             <div class="col-md-4">
                 <label for="name">Tên ghi chú</label>
-                <input type="text" class="form-control" placeholder="Tìm kiếm theo tên" name="s_name" id="name">
+                <input type="text" class="form-control" placeholder="Tìm kiếm theo tên" name="s_name" id="name" value="{{s_name}}">
             </div>
 
             <div class="col-md-4">
-                <label for="description">Mô tả</label>
-                <input type="text" class="form-control" placeholder="Tìm kiếm theo mô tả" name="s_description"
-                    id="description">
+                <label for="s_desc">Mô tả</label>
+                <input type="text" class="form-control" placeholder="Tìm kiếm theo mô tả" name="s_desc" id="s_desc" value="{{s_desc}}">
             </div>
         </div>
 
@@ -29,10 +28,10 @@
                 <label for="createdAtFrom">Ngày tạo</label>
                 <div class="d-flex">
                     <input type="date" class="form-control flex-grow-1" placeholder="Tìm kiếm theo mô tả"
-                        name="s_createdAtFrom" id="createdAtFrom">
+                        name="s_createdAtFrom" id="createdAtFrom" value="{{s_createdAtFrom}}">
                     <span class="mx-2">~</span>
                     <input type="date" class="form-control flex-grow-1" placeholder="Tìm kiếm theo mô tả"
-                        name="createdAtTo" id="createdAtTo">
+                        name="s_createdAtTo" id="createdAtTo" value="{{s_createdAtTo}}">
                 </div>
             </div>
 
@@ -40,14 +39,14 @@
                 <label for="updatedAtFrom">Ngày cập nhật</label>
                 <div class="d-flex">
                     <input type="date" class="form-control flex-grow-1" placeholder="Tìm kiếm theo mô tả"
-                        name="updatedAtFrom" id="updatedAtFrom">
+                        name="updatedAtFrom" id="updatedAtFrom" value="{{s_updatedAtFrom}}">
                     <span class="mx-2">~</span>
                     <input type="date" class="form-control flex-grow-1" placeholder="Tìm kiếm theo mô tả"
-                        name="updatedAtTo" id="updatedAtTo">
+                        name="updatedAtTo" id="updatedAtTo" value="{{s_updatedAtTo}}">
                 </div>
             </div>
         </div>
-        
+
 
         <button class="btn btn-success btn-sm mt-2">Tìm kiếm</button>
     </form>

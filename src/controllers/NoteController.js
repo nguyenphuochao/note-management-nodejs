@@ -4,16 +4,56 @@ const { mutipleMongooseToObject } = require('../util/mongoose')
 class NoteController {
     // [GET] /note/index
     index(req, res, next) {
-        const searchQuery = Note.find({});
+        let is_dislay_search = false
+        let searchQuery = Note.find({});
+        const s_name = req.query.s_name
+        const s_desc = req.query.s_desc
+        const s_createdAtFrom = req.query.s_createdAtFrom
+        const s_createdAtTo = req.query.s_createdAtTo
+        const s_updatedAtFrom = req.query.s_updatedAtFrom
+        const s_updatedAtTo = req.query.s_updatedAtTo
 
-        // if (req.query.hasOwnProperty('name')) {
+        if (s_name != undefined || s_desc != undefined) {
+            is_dislay_search = true
+        }
 
-        // }
+        if (Object.hasOwn(req.query, 's_name')) {
+            searchQuery = searchQuery.find({
+                name: new RegExp(s_name, "i")
+            })
+        }
+
+        if (Object.hasOwn(req.query, 's_desc')) {
+            searchQuery = searchQuery.find({
+                description: new RegExp(s_desc, "i")
+            })
+        }
+
+        if (Object.hasOwn(req.query, 's_createdAtFrom') && s_createdAtFrom != '') {
+            const createdAtFrom = new Date(s_createdAtFrom)
+            searchQuery = searchQuery.find({
+                createdAt: { $gte: createdAtFrom }
+            })
+        }
+
+        if (Object.hasOwn(req.query, 's_createdAtTo') && s_createdAtTo != '') {
+            const createdAtTo = new Date(s_createdAtTo)
+            searchQuery = searchQuery.find({
+                createdAt: { $lte: createdAtTo }
+            })
+        }
 
         searchQuery
             .then(notes => {
                 res.render('notes/index', {
-                    notes: mutipleMongooseToObject(notes)
+                    notes: mutipleMongooseToObject(notes),
+                    s_name,
+                    s_desc,
+                    is_dislay_search: is_dislay_search ? 'block' : 'none',
+                    s_createdAtFrom,
+                    s_createdAtTo,
+                    s_updatedAtFrom,
+                    s_updatedAtTo
                 })
             })
             .catch(next)
