@@ -30,14 +30,16 @@ class NoteController {
         }
 
         if (Object.hasOwn(req.query, 's_createdAtFrom') && s_createdAtFrom != '') {
-            const createdAtFrom = new Date(s_createdAtFrom)
+            const createdAtFrom = new Date(s_createdAtFrom + 'T00:00:00.000Z').toISOString()
+            console.log(createdAtFrom >= "2025-07-15T00:00:00.000Z"); // fix later
             searchQuery = searchQuery.find({
                 createdAt: { $gte: createdAtFrom }
             })
         }
 
         if (Object.hasOwn(req.query, 's_createdAtTo') && s_createdAtTo != '') {
-            const createdAtTo = new Date(s_createdAtTo)
+            const createdAtTo = new Date(s_createdAtTo + 'T00:00:00.000Z').toISOString()
+            console.log(createdAtTo >= "2025-07-16T12:38:38.395+00:00");
             searchQuery = searchQuery.find({
                 createdAt: { $lte: createdAtTo }
             })

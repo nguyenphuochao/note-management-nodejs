@@ -23,6 +23,9 @@ app.engine('handlebars', engine({
                 hour12: false
             });
             return vnFullFormat
+        },
+        sum: (a, b) => {
+            return a + b
         }
     }
 }));

@@ -56,7 +56,6 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>ID</th>
                     <th>Tên ghi chú</th>
                     <th>Mô tả</th>
                     <th>Ngày tạo</th>
@@ -67,8 +66,7 @@
             <tbody>
                 {{#each notes}}
                 <tr>
-                    <td scope="row"></td>
-                    <td>{{this._id}}</td>
+                    <td scope="row">{{sum @index 1 }}</td>
                     <td>{{this.name}}</td>
                     <td>{{this.description}}</td>
                     <td>{{vnFullFormat this.createdAt}}</td>
