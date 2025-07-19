@@ -1,10 +1,12 @@
 const express = require('express')
 const path = require('path');
+const methodOverride = require('method-override');
 const { engine } = require('express-handlebars')
+var paginate = require('handlebars-paginate');
 const app = express()
 
-const db = require('./config/connectDB') // connect db
-const route = require('./routes') // get route
+const db = require('./config/connectDB')
+const route = require('./routes');
 
 // view engine handlebars
 app.engine('handlebars', engine({
@@ -26,6 +28,19 @@ app.engine('handlebars', engine({
         },
         sum: (a, b) => {
             return a + b
+        },
+        pagination: (totalPages) => {
+            var items = []
+            for (var i = 1; i <= totalPages; i++) {
+                items.push(i)
+            }
+            return items
+        },
+        active: (a, b) => {
+            return a == b ? 'active' : ''
+        },
+        selected: (a, b) => {
+            return a == b ? 'selected' : ''
         }
     }
 }));
@@ -41,9 +56,12 @@ app.use(express.urlencoded({
 })); // support POST Form
 app.use(express.json()); // support JSON : ajax, fetch, axios, XMLHttpRequest
 
+// HTTP method override
+app.use(methodOverride('_method'));
+
 const port = 3000
 
-route(app)
+route(app) // router
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

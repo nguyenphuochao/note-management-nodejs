@@ -4,7 +4,7 @@ const RegisterController = require('../controllers/RegisterController')
 
 module.exports = function route(app) {
     // rediect default
-    app.get('/', function(req, res) {
+    app.get('/', function (req, res) {
         res.redirect('/notes')
     })
 
@@ -21,9 +21,10 @@ module.exports = function route(app) {
     app.get('/notes', NoteController.index)
     app.get('/notes/create', NoteController.create)
     app.post('/notes/store', NoteController.store)
-    app.get('/notes/edit', NoteController.edit)
-    app.put('/notes/update', NoteController.update)
-    app.delete('/notes/destroy', NoteController.destroy)
+    app.get('/notes/:id/edit', NoteController.edit)
+    app.put('/notes/:id', NoteController.update)
+    app.delete('/notes/:id', NoteController.destroy)
+    app.post('/notes/:id/copy', NoteController.copy)
 
     // categories
 }
