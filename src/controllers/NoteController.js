@@ -4,14 +4,15 @@ const { mutipleMongooseToObject, mongooseToObject } = require('../util/mongoose'
 class NoteController {
     // [GET] /note/index
     index(req, res, next) {
+        // show form search
         let is_dislay_search = false
-        // pagination
-        const page = parseInt(req.query.page) || 1
-        const limit = parseInt(req.query["show-count"]) || 10;
-        const skipIndex = (page - 1) * limit;
-        const totalPage = 1
 
-        let searchQuery = Note.find({}).skip(skipIndex).limit(limit);
+        // pagination
+        const page = parseInt(req.query.page) || 1 // current page
+        const limit = parseInt(req.query["show-count"]) || 10; // limit data
+        const skipIndex = (page - 1) * limit; // offset index
+
+        let searchQuery = Note.find({}).skip(skipIndex).limit(limit); // query data model
 
         // search query
         const s_name = req.query.s_name
@@ -21,6 +22,7 @@ class NoteController {
         const s_updatedAtFrom = req.query.s_updatedAtFrom
         const s_updatedAtTo = req.query.s_updatedAtTo
 
+        // search name
         if (Object.hasOwn(req.query, 's_name') && s_name != '') {
             is_dislay_search = true
             searchQuery = searchQuery.find({
@@ -28,6 +30,7 @@ class NoteController {
             })
         }
 
+        // search description
         if (Object.hasOwn(req.query, 's_desc') && s_desc != '') {
             is_dislay_search = true
             searchQuery = searchQuery.find({
@@ -35,6 +38,7 @@ class NoteController {
             })
         }
 
+        // search createdAt from
         if (Object.hasOwn(req.query, 's_createdAtFrom') && s_createdAtFrom != '') {
             is_dislay_search = true
             const createdAtFrom = new Date(s_createdAtFrom + 'T00:00:00.000Z').toISOString()
@@ -43,6 +47,7 @@ class NoteController {
             })
         }
 
+        // search createdAt to
         if (Object.hasOwn(req.query, 's_createdAtTo') && s_createdAtTo != '') {
             is_dislay_search = true
             const createdAtTo = new Date(s_createdAtTo + 'T23:59:59.000Z').toISOString()
@@ -51,6 +56,7 @@ class NoteController {
             })
         }
 
+        // search updatedAt from
         if (Object.hasOwn(req.query, 's_updatedAtFrom') && s_updatedAtFrom != '') {
             is_dislay_search = true
             const updateAtFrom = new Date(s_updatedAtFrom + 'T00:00:00.000Z').toISOString()
@@ -59,6 +65,7 @@ class NoteController {
             })
         }
 
+        // search updatedAt to
         if (Object.hasOwn(req.query, 's_updatedAtTo') && s_updatedAtTo != '') {
             is_dislay_search = true
             const updatedAtTo = new Date(s_updatedAtTo + 'T23:59:59.000Z').toISOString()
@@ -67,8 +74,11 @@ class NoteController {
             })
         }
 
-        searchQuery
-            .then(notes => {
+        Promise.all([
+            searchQuery,
+            Note.countDocuments({})
+        ])
+            .then(([notes, totalPage]) =>
                 res.render('notes/index', {
                     notes: mutipleMongooseToObject(notes),
                     s_name,
@@ -78,10 +88,11 @@ class NoteController {
                     s_createdAtTo,
                     s_updatedAtFrom,
                     s_updatedAtTo,
-                    totalPage,
-                    limit
+                    totalPage: Math.ceil(totalPage / limit),
+                    limit,
+                    page
                 })
-            })
+            )
             .catch(next)
     }
 
@@ -92,7 +103,13 @@ class NoteController {
 
     // [POST] /note/store
     store(req, res) {
-        const note = new Note(req.body)
+        const formData = {
+            name: req.body.name,
+            description: req.body.description,
+            userID: '123',
+            bookmark: 0
+        }
+        const note = new Note(formData)
         note.save()
             .then(() => res.redirect('/notes'))
             .catch(err => console.log(err))
@@ -133,6 +150,15 @@ class NoteController {
                     .catch(err => console.log(err))
             })
             .catch(next)
+    }
+
+    // [PATCH] /notes/:id/bookmark
+    bookmark(req, res) {
+        Note.updateOne({ _id: req.params.id }, { bookmark: req.body.bookmark })
+            .then(() => res.json({
+                status: "OK"
+            }))
+            .catch(err => console.log(err))
     }
 }
 

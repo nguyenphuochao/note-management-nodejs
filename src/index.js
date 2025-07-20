@@ -2,11 +2,25 @@ const express = require('express')
 const path = require('path');
 const methodOverride = require('method-override');
 const { engine } = require('express-handlebars')
-var paginate = require('handlebars-paginate');
+const session = require('express-session');
+
 const app = express()
 
 const db = require('./config/connectDB')
 const route = require('./routes');
+
+app.use(session({
+    secret: 'your_secret_key', // A strong, unique secret for signing the session ID cookie
+    resave: false, // Don't save session if unmodified
+    saveUninitialized: true, // Save new but uninitialized sessions
+    cookie: { secure: false } // Set to true if using HTTPS in production
+}));
+
+// global session user
+app.use((req, res, next) => {
+    res.locals.session = req.session.user;
+    next();
+});
 
 // view engine handlebars
 app.engine('handlebars', engine({
@@ -29,6 +43,9 @@ app.engine('handlebars', engine({
         sum: (a, b) => {
             return a + b
         },
+        subtract: (a, b) => {
+            return a - b
+        },
         pagination: (totalPages) => {
             var items = []
             for (var i = 1; i <= totalPages; i++) {
@@ -41,6 +58,15 @@ app.engine('handlebars', engine({
         },
         selected: (a, b) => {
             return a == b ? 'selected' : ''
+        },
+        prevPage: (page) => {
+            return page <= 1 ? 'disabled' : ''
+        },
+        nextPage: (page, totalPage) => {
+            return page >= totalPage ? 'disabled' : ''
+        },
+        bookmarkIcon: (bookmark) => {
+            return bookmark == 1 ? 'fa-solid' : 'fa-regular'
         }
     }
 }));
@@ -51,15 +77,17 @@ db.connectDB() // connect DB
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(express.urlencoded({
-    extended: true
-})); // support POST Form
+app.use(express.urlencoded({ extended: true })); // support POST Form
 app.use(express.json()); // support JSON : ajax, fetch, axios, XMLHttpRequest
 
 // HTTP method override
 app.use(methodOverride('_method'));
 
 const port = 3000
+
+var createHash = function (password) {
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
 
 route(app) // router
 

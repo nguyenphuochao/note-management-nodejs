@@ -10,7 +10,7 @@
                 <i class="fa-solid fa-sort"></i> Sắp xếp
             </a>
             <a href="/notes/create" class="btn btn-warning btn-sm font-weight-bold">
-                <i class="fa-solid fa-star"></i> Đánh dấu
+                <i class="fa-solid fa-bookmark"></i> Đánh dấu <span>(0)</span>
             </a>
         </div>
 
@@ -88,6 +88,7 @@
                     <th>#</th>
                     <th style="width: 20%;">Tên ghi chú <a href="#"><i class="fa-solid fa-sort"></i></a></th>
                     <th>Mô tả</th>
+                    <th>Đánh dấu</th>
                     <th>Ngày tạo</th>
                     <th>Ngày cập nhật</th>
                     <th style="width: 20%;">Thao tác</th>
@@ -98,7 +99,10 @@
                 <tr>
                     <td scope="row">{{sum @index 1 }}</td>
                     <td>{{this.name}}</td>
-                    <td class="description">{{this.description}}</td>
+                    <td>{{this.description}}</td>
+                    <td><i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
+                            data-bookmark="{{this.bookmark}}" data-id="{{this._id}}"></i>
+                    </td>
                     <td>{{vnFullFormat this.createdAt}}</td>
                     <td>{{vnFullFormat this.updatedAt}}</td>
                     <td>
@@ -115,6 +119,11 @@
                         </a>
                     </td>
                 </tr>
+                {{else}}
+                <tr>
+                    <td colspan="7" class="text-center">Không tìm thấy ghi chú. <a href="/notes/create">Thêm mới ghi
+                            chú</a></td>
+                </tr>
                 {{/each}}
             </tbody>
         </table>
@@ -122,16 +131,18 @@
         {{!-- Pagination --}}
         <nav>
             <ul class="pagination">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                <li class="page-item {{prevPage page}}">
+                    <a class="page-link" href="?page={{subtract page 1}}" tabindex="-1">Previous</a>
                 </li>
 
                 {{#each (pagination totalPage)}}
-                <li class="page-item"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
+                <li class="page-item {{active this @root.page}}"><a class="page-link page-item-link"
+                        href="?page={{this}}">{{this}}</a>
+                </li>
                 {{/each}}
 
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                <li class="page-item {{nextPage page totalPage}}">
+                    <a class="page-link" href="?page={{sum page 1}}">Next</a>
                 </li>
             </ul>
         </nav>
@@ -143,6 +154,7 @@
 {{!-- Form submit request server --}}
 <form class="form-delete" method="POST"></form>
 <form class="form-copy" method="POST"></form>
+<form class="form-bookmark" method="POST"></form>
 
 {{!-- Modal confirm delete --}}
 <div class="modal fade" id="modalConfirmDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -190,13 +202,16 @@
     document.addEventListener('DOMContentLoaded', function () {
         var formDelete = $(".form-delete")
         var formCopy = $(".form-copy")
+        var formBookmark = $(".form-bookmark")
         var btnDelete = $(".btn-delete")
         var btnCopy = $(".btn-copy")
         var btnDeleteConfirm = $(".btn-delete-confirm")
         var btnCopyConfirm = $(".btn-copy-confirm")
+        var btnBookmark = $(".btn-bookmark")
         var showSelectCountRecord = $("#select-show-count-record")
         var dataID = null;
 
+        // Click button delete
         btnDelete.click(function () {
             dataID = $(this).data("id")
         })
@@ -206,6 +221,7 @@
             formDelete.submit();
         })
 
+        // Click button copy
         btnCopy.click(function () {
             dataID = $(this).data("id")
         })
@@ -215,10 +231,40 @@
             formCopy.submit();
         })
 
+        // Change show count
         showSelectCountRecord.change(function () {
             var countData = $(this).val()
             var str_param = getUpdatedParam("show-count", countData)
             window.location.href = "/notes?" + str_param
+        })
+
+        // click page link
+        $(".page-item-link").click(function (e) {
+            e.preventDefault();
+            var page = $(this).text()
+            var str_param = getUpdatedParam("page", page)
+            window.location.href = "/notes?" + str_param
+        })
+
+        // Click button bookmark
+        btnBookmark.click(function () {
+            dataID = $(this).data("id")
+            var bookmark = $(this).data("bookmark")
+
+            $.ajax({
+                url: `/notes/${dataID}/bookmark?_method=PATCH`,
+                type: 'POST',
+                data: { bookmark: bookmark == 1 ? 0 : 1 }
+            })
+                .done(function (data) {
+                    $(`.fa-bookmark-${dataID}`).toggleClass('fa-solid fa-regular')
+                    $(`.fa-bookmark-${dataID}`).attr('data-bookmark', bookmark == 1 ? 0 : 1)
+                })
+                .fail(function (error) {
+                    console.log("error: ", error);
+                })
+
+
         })
     })
 </script>

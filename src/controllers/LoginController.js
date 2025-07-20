@@ -1,3 +1,5 @@
+const User = require('../models/User')
+
 class LoginController {
     // [GET] /login
     index(req, res) {
@@ -6,12 +8,26 @@ class LoginController {
 
     // [POST] /login
     login(req, res) {
-        res.json(req.body)
+        const user = User.findOne({ username: req.body.username })
+            .then(user => {
+                if (!user) return res.json({ message: 'User not found' })
+                const result = req.body.password === user.password
+                if (!result) return res.json({ message: 'Password invalid' })
+                // set session user
+                req.session.user = {
+                    id: user._id,
+                    username: user.username,
+                    fullname: user.fullname
+                };
+                res.redirect('/')
+            })
+            .catch(err => console.log(err))
     }
 
     // [POST] /logout
     logout(req, res) {
-        res.json(req.body)
+        req.session.destroy()
+        res.redirect('/login')
     }
 }
 
