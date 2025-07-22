@@ -4,6 +4,7 @@ const methodOverride = require('method-override');
 const { engine } = require('express-handlebars')
 const session = require('express-session');
 
+
 const app = express()
 
 const db = require('./config/connectDB')
@@ -13,7 +14,7 @@ app.use(session({
     secret: 'your_secret_key', // A strong, unique secret for signing the session ID cookie
     resave: false, // Don't save session if unmodified
     saveUninitialized: true, // Save new but uninitialized sessions
-    cookie: { secure: false } // Set to true if using HTTPS in production
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // Set to true if using HTTPS in production
 }));
 
 // global session user

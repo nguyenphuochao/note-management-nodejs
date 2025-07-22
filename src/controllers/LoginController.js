@@ -1,4 +1,6 @@
 const User = require('../models/User')
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 class LoginController {
     // [GET] /login
@@ -10,9 +12,14 @@ class LoginController {
     login(req, res) {
         const user = User.findOne({ username: req.body.username })
             .then(user => {
-                if (!user) return res.json({ message: 'User not found' })
-                const result = req.body.password === user.password
-                if (!result) return res.json({ message: 'Password invalid' })
+                if (!user) {
+                    return res.json({ message: 'Tài khoản người dùng không tồn tại' })
+                }
+
+                const result = bcrypt.compareSync(req.body.password, user.password);
+                if (!result) {
+                    return res.json({ message: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ' })
+                }
                 // set session user
                 req.session.user = {
                     id: user._id,
