@@ -12,7 +12,7 @@ class RegisterController {
     register(req, res) {
         const userData = {
             fullname: req.body.fullname,
-            username: req.body.username,
+            email: req.body.email,
             password: bcrypt.hashSync(req.body.password, saltRounds)
         }
         const user = new User(userData)

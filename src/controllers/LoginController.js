@@ -10,20 +10,27 @@ class LoginController {
 
     // [POST] /login
     login(req, res) {
-        const user = User.findOne({ username: req.body.username })
+        const user = User.findOne({ email: req.body.email })
             .then(user => {
                 if (!user) {
-                    return res.json({ message: 'Tài khoản người dùng không tồn tại' })
+                    return res.json({
+                        status_code: 422,
+                        message: 'Tài khoản người dùng không tồn tại'
+                    })
                 }
 
                 const result = bcrypt.compareSync(req.body.password, user.password);
                 if (!result) {
-                    return res.json({ message: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ' })
+                    return res.json({ 
+                        status_code: 422,
+                        message: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ' 
+                    })
                 }
+                
                 // set session user
                 req.session.user = {
                     id: user._id,
-                    username: user.username,
+                    email: user.email,
                     fullname: user.fullname
                 };
                 res.redirect('/')

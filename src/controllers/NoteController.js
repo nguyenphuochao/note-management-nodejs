@@ -12,7 +12,7 @@ class NoteController {
         const limit = parseInt(req.query["show-count"]) || 10; // limit data
         const skipIndex = (page - 1) * limit; // offset index
 
-        let searchQuery = Note.find({}).skip(skipIndex).limit(limit); // query data model
+        let searchQuery = Note.find({ userId: req.session.user.id }).skip(skipIndex).limit(limit); // query data model
 
         // search query
         const s_name = req.query.s_name
@@ -106,7 +106,7 @@ class NoteController {
         const formData = {
             name: req.body.name,
             description: req.body.description,
-            userID: '123',
+            userId: req.session.user.id,
             bookmark: 0
         }
         const note = new Note(formData)
