@@ -143,7 +143,8 @@ class NoteController {
             .then(note => {
                 const noteData = new Note({
                     name: note.name,
-                    description: note.description
+                    description: note.description,
+                    userId: req.session.user.id
                 })
                 noteData.save()
                     .then(() => res.redirect('/notes'))
