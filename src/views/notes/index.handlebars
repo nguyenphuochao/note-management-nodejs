@@ -15,8 +15,8 @@
         </div>
 
         <div>
-            <a href="/notes/create" class="btn btn-danger btn-sm font-weight-bold">
-                <i class="fa-solid fa-trash"></i> Thùng rác <span>(0)</span>
+            <a href="/notes/trash" class="btn btn-danger btn-sm font-weight-bold">
+                <i class="fa-solid fa-trash"></i> Thùng rác <span>({{totalDeleted}})</span>
             </a>
         </div>
     </div>
@@ -129,6 +129,9 @@
         </table>
 
         {{!-- Pagination --}}
+
+        {{#if notes}}
+
         <nav>
             <ul class="pagination">
                 <li class="page-item {{prevPage page}}">
@@ -146,6 +149,8 @@
                 </li>
             </ul>
         </nav>
+
+        {{/if}}
 
 
     </div>
@@ -210,6 +215,9 @@
         var btnBookmark = $(".btn-bookmark")
         var showSelectCountRecord = $("#select-show-count-record")
         var dataID = null;
+
+        // Update title
+        document.title = "Quản lí ghi chú | Danh sách"
 
         // Click button delete
         btnDelete.click(function () {

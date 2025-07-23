@@ -30,6 +30,7 @@ module.exports = function route(app) {
     app.delete('/notes/:id', NoteController.destroy)
     app.post('/notes/:id/copy', NoteController.copy)
     app.patch('/notes/:id/bookmark', NoteController.bookmark)
+    app.get('/notes/trash', NoteController.trash)
 
     // categories
 }

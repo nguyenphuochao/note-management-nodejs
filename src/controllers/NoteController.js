@@ -76,9 +76,10 @@ class NoteController {
 
         Promise.all([
             searchQuery,
-            Note.countDocuments({ userId: req.session.user.id })
+            Note.countDocuments({ userId: req.session.user.id }),
+            Note.countDocumentsDeleted({})
         ])
-            .then(([notes, totalPage]) =>
+            .then(([notes, totalPage, totalDeleted]) =>
                 res.render('notes/index', {
                     notes: mutipleMongooseToObject(notes),
                     s_name,
@@ -90,7 +91,8 @@ class NoteController {
                     s_updatedAtTo,
                     totalPage: Math.ceil(totalPage / limit),
                     limit,
-                    page
+                    page,
+                    totalDeleted
                 })
             )
             .catch(next)
@@ -107,7 +109,7 @@ class NoteController {
             name: req.body.name,
             description: req.body.description,
             userId: req.session.user.id,
-            bookmark: 0
+            bookmark: 0,
         }
         const note = new Note(formData)
         note.save()
@@ -132,7 +134,7 @@ class NoteController {
 
     // [DELETE] /note/destroy
     destroy(req, res) {
-        Note.deleteOne({ _id: req.params.id })
+        Note.delete({ _id: req.params.id })
             .then(() => res.redirect('/notes'))
             .catch(err => console.log(err))
     }
@@ -161,6 +163,15 @@ class NoteController {
             }))
             .catch(err => console.log(err))
     }
+
+    // [GET] /notes/trash
+    trash(req, res) {
+        Note.findDeleted({})
+            .then(notes => res.render('notes/trash', { notes: mutipleMongooseToObject(notes) }))
+            .catch(err => console.log(err))
+    }
+
+    // [POST] /notes/trash
 }
 
 module.exports = new NoteController

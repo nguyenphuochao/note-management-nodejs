@@ -86,10 +86,6 @@ app.use(methodOverride('_method'));
 
 const port = 3000
 
-var createHash = function (password) {
-    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-}
-
 route(app) // router
 
 app.listen(port, () => {
