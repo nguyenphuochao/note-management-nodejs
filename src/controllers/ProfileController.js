@@ -4,11 +4,15 @@ class ProfileController {
     // [GET] /profile
     index(req, res) {
         if (req.session.user) {
-            const userProfile = req.session.user;
-            res.json({ user : userProfile })
+            const usrerProfile = req.session.user;
+            res.render('profile/index', { user: usrerProfile })
         } else {
             res.redirect('/login')
         }
+    }
+
+    // [POST] /profile/update
+    update(req, res) {
 
     }
 

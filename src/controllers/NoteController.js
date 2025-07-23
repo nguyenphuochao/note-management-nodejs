@@ -76,7 +76,7 @@ class NoteController {
 
         Promise.all([
             searchQuery,
-            Note.countDocuments({})
+            Note.countDocuments({ userId: req.session.user.id })
         ])
             .then(([notes, totalPage]) =>
                 res.render('notes/index', {
