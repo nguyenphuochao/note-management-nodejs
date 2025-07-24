@@ -12,7 +12,7 @@ class NoteController {
         const limit = parseInt(req.query["show-count"]) || 10; // limit data
         const skipIndex = (page - 1) * limit; // offset index
 
-        let searchQuery = Note.find({ userId: req.session.user.id }).skip(skipIndex).limit(limit); // query data model
+        let searchQuery = Note.find({ userId: req.session.user.id }) // query data model
 
         // search query
         const s_name = req.query.s_name
@@ -75,11 +75,11 @@ class NoteController {
         }
 
         Promise.all([
-            searchQuery,
-            Note.countDocuments({ userId: req.session.user.id }),
-            Note.countDocumentsDeleted({})
+            Note.find(searchQuery).countDocuments({ userId: req.session.user.id }),
+            searchQuery.skip(skipIndex).limit(limit),
+            Note.countDocumentsWithDeleted({ userId: req.session.user.id, deleted: true })
         ])
-            .then(([notes, totalPage, totalDeleted]) =>
+            .then(([totalItems, notes, totalDeleted]) =>
                 res.render('notes/index', {
                     notes: mutipleMongooseToObject(notes),
                     s_name,
@@ -89,7 +89,8 @@ class NoteController {
                     s_createdAtTo,
                     s_updatedAtFrom,
                     s_updatedAtTo,
-                    totalPage: Math.ceil(totalPage / limit),
+                    totalItems,
+                    totalPage: Math.ceil(totalItems / limit),
                     limit,
                     page,
                     totalDeleted
@@ -166,12 +167,24 @@ class NoteController {
 
     // [GET] /notes/trash
     trash(req, res) {
-        Note.findDeleted({})
+        Note.findWithDeleted({ deleted: true })
             .then(notes => res.render('notes/trash', { notes: mutipleMongooseToObject(notes) }))
             .catch(err => console.log(err))
     }
 
-    // [POST] /notes/trash
+    // [DELETE] /notes/:id/forceDelete
+    forceDelete(req, res) {
+        Note.deleteOne({ _id: req.params.id })
+            .then(() => res.redirect('/notes/trash'))
+            .catch(err => console.log(err))
+    }
+
+    // [PATCH] /notes/:id/restore
+    restore(req, res) {
+        Note.restore({ _id: req.params.id })
+            .then(() => res.redirect('/notes/trash'))
+            .catch(err => console.log(err))
+    }
 }
 
 module.exports = new NoteController

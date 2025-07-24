@@ -18,15 +18,15 @@
                 {{#each notes}}
                 <tr>
                     <td scope="row">{{sum @index 1 }}</td>
-                    <td>{{this.name}}</td>
-                    <td>{{this.description}}</td>
+                    <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
+                    <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
                     <td>{{vnFullFormat this.deletedAt}}</td>
                     <td>
-                        <a href="/notes/{{this._id}}/restore" class="btn btn-warning btn-sm btn-edit">
+                        <a href="#" class="btn btn-warning btn-sm btn-restore" data-id="{{this._id}}">
                             <i class="fa-solid fa-pen-to-square"></i> Khôi phục
                         </a>
-                        <a href="#" class="btn btn-danger btn-sm btn-delete" data-toggle="modal"
-                            data-target="#modalConfirmDelete" data-id="{{this._id}}">
+                        <a href="#" class="btn btn-danger btn-sm btn-delete" data-id="{{this._id}}" data-toggle="modal"
+                            data-target="#modalConfirmDelete">
                             <i class="fa-solid fa-trash-can"></i> Xóa vĩnh viễn
                         </a>
                     </td>
@@ -43,7 +43,8 @@
 </div>
 
 {{!-- Form submit request server --}}
-<form class="form-delete" method="POST"></form>
+<form name="form-restore" method="POST"></form>
+<form name="form-delete" method="POST"></form>
 
 {{!-- Modal confirm delete --}}
 <div class="modal fade" id="modalConfirmDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -56,12 +57,47 @@
                 </button>
             </div>
             <div class="modal-body">
-                Bạn chắc xóa ghi chú này chứ?
+                Hành động này sẽ xóa vĩnh viễn. Bạn chắc chắn?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-danger btn-delete-confirm">Xác nhận xóa</button>
+                <button type="button" class="btn btn-danger btn-delete-confirm">Xác nhận xóa vĩnh viễn</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Loaded DOM
+    document.addEventListener("DOMContentLoaded", (event) => {
+        let noteId;
+        var formRestore = document.forms['form-restore'];
+        var formDelete = document.forms['form-delete'];
+        var btnRestore = $('.btn-restore');
+        var btnDeleteConfirm = $('.btn-delete-confirm');
+
+        // Update title
+        document.title = "Quản lí ghi chú | Thùng rác";
+
+        // Modal modalConfirmDelete show
+        $('#modalConfirmDelete').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            noteId = button.data('id')
+        })
+
+        // Click restore note
+        btnRestore.click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            formRestore.action = '/notes/' + id + '/restore?_method=PATCH';
+            formRestore.submit();
+        })
+
+        // Click delete note
+        btnDeleteConfirm.click(function () {
+            formDelete.action = '/notes/' + noteId + '/forceDelete?_method=DELETE';
+            formDelete.submit();
+        })
+    });
+
+</script>
