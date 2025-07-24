@@ -87,7 +87,7 @@
                 <tr>
                     <th>#</th>
                     <th style="width: 20%;">Tên ghi chú <a href="#"><i class="fa-solid fa-sort"></i></a></th>
-                    <th>Mô tả</th>
+                    <th style="width: 20%;">Mô tả</th>
                     <th>Đánh dấu</th>
                     <th>Ngày tạo</th>
                     <th>Ngày cập nhật</th>
@@ -98,8 +98,8 @@
                 {{#each notes}}
                 <tr>
                     <td scope="row">{{sum @index 1 }}</td>
-                    <td>{{this.name}}</td>
-                    <td>{{this.description}}</td>
+                    <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
+                    <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
                     <td><i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
                             data-bookmark="{{this.bookmark}}" data-id="{{this._id}}"></i>
                     </td>
