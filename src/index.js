@@ -77,6 +77,13 @@ app.use(express.json()); // support JSON : ajax, fetch, axios, XMLHttpRequest
 // HTTP method override
 app.use(methodOverride('_method'));
 
+// use session global
+app.use(function (req, res, next) {
+    res.locals.message = req.session.message;
+    delete req.session.message;
+    next();
+})
+
 const port = 3000
 
 route(app) // router

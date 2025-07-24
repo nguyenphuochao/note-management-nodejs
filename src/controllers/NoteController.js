@@ -114,7 +114,15 @@ class NoteController {
         }
         const note = new Note(formData)
         note.save()
-            .then(() => res.redirect('/notes'))
+            .then(() => {
+                // use session alert
+                req.session.message = {
+                    type: 'success',
+                    title: 'Create note successfully'
+                }
+
+                res.redirect('/notes')
+            })
             .catch(err => console.log(err))
     }
 
