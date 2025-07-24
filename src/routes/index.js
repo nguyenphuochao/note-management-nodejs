@@ -2,37 +2,40 @@ const NoteController = require('../controllers/NoteController')
 const LoginController = require('../controllers/LoginController')
 const RegisterController = require('../controllers/RegisterController')
 const ProfileController = require('../controllers/ProfileController')
+const authenticateUser = require('../middlewares/authenticateUser')
 
-module.exports = function route(app) {
+
+module.exports = function route(router) {
+    // login
+    router.get('/login', LoginController.index)
+    router.post('/login', LoginController.login)
+    router.post('/logout', LoginController.logout)
+
+    // register
+    router.get('/register', RegisterController.index)
+    router.post('/register', RegisterController.register)
+
     // rediect default
-    app.get('/', function (req, res) {
+    router.get('/', function (req, res) {
         res.redirect('/notes')
     })
 
-    // login
-    app.get('/login', LoginController.index)
-    app.post('/login', LoginController.login)
-    app.post('/logout', LoginController.logout)
-
-    // register
-    app.get('/register', RegisterController.index)
-    app.post('/register', RegisterController.register)
+    // middleware authenticateUser
+    router.use(authenticateUser);
 
     // profile
-    app.get('/profile', ProfileController.index)
+    router.get('/profile', ProfileController.index)
 
     // notes
-    app.get('/notes', NoteController.index)
-    app.get('/notes/create', NoteController.create)
-    app.post('/notes/store', NoteController.store)
-    app.get('/notes/:id/edit', NoteController.edit)
-    app.put('/notes/:id', NoteController.update)
-    app.delete('/notes/:id', NoteController.destroy)
-    app.post('/notes/:id/copy', NoteController.copy)
-    app.patch('/notes/:id/bookmark', NoteController.bookmark)
-    app.get('/notes/trash', NoteController.trash)
-    app.patch('/notes/:id/restore', NoteController.restore)
-    app.delete('/notes/:id/forceDelete', NoteController.forceDelete)
-
-    // categories
+    router.get('/notes', NoteController.index)
+    router.get('/notes/create', NoteController.create)
+    router.post('/notes/store', NoteController.store)
+    router.get('/notes/:id/edit', NoteController.edit)
+    router.put('/notes/:id', NoteController.update)
+    router.delete('/notes/:id', NoteController.destroy)
+    router.post('/notes/:id/copy', NoteController.copy)
+    router.patch('/notes/:id/bookmark', NoteController.bookmark)
+    router.get('/notes/trash', NoteController.trash)
+    router.patch('/notes/:id/restore', NoteController.restore)
+    router.delete('/notes/:id/forceDelete', NoteController.forceDelete)
 }

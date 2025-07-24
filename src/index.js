@@ -4,7 +4,6 @@ const methodOverride = require('method-override');
 const { engine } = require('express-handlebars')
 const session = require('express-session');
 
-
 const app = express()
 
 const db = require('./config/connectDB')
@@ -16,12 +15,6 @@ app.use(session({
     saveUninitialized: true, // Save new but uninitialized sessions
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // Set to true if using HTTPS in production
 }));
-
-// global session user
-app.use((req, res, next) => {
-    res.locals.session = req.session.user;
-    next();
-});
 
 // view engine handlebars
 app.engine('handlebars', engine({
