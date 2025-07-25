@@ -1,0 +1,59 @@
+<div class="mt-4">
+    <h2>Đánh dấu ghi chú</h2>
+
+    <a href="/notes" class="font-weight-bold"><i class="fa-solid fa-arrow-left"></i> Danh sách ghi chú</a>
+
+    <div class="mt-4">
+
+        <div class="mt-2 table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th style="width: 20%;">Tên ghi chú</th>
+                        <th style="width: 20%;">Mô tả</th>
+                        <th>Ngày tạo</th>
+                        <th>Ngày cập nhật</th>
+                        <th style="width: 13%;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each notes}}
+                    <tr>
+                        <td scope="row">{{sum @index 1 }}</td>
+                        <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
+                        <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
+                        <td>{{vnFullFormat this.createdAt}}</td>
+                        <td>{{vnFullFormat this.updatedAt}}</td>
+                        <td>
+                            <a href="/notes/{{this._id}}/edit" class="btn btn-warning btn-sm btn-edit">
+                                <i class="fa-solid fa-pen-to-square"></i> Bỏ đánh dấu
+                            </a>
+                        </td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td colspan="6" class="text-center">Không tìm thấy đánh dấu. <a href="/notes">Danh sách ghi chú</a></td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+
+            <div class="total-items">
+                <p>Số lượng ghi chú: <b>{{totalItems}}</b></p>
+            </div>
+
+            {{!-- Pagination --}}
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Loaded DOM
+    document.addEventListener("DOMContentLoaded", (event) => {
+
+    });
+
+</script>

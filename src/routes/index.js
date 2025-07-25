@@ -38,4 +38,7 @@ module.exports = function route(router) {
     router.get('/notes/trash', NoteController.trash)
     router.patch('/notes/:id/restore', NoteController.restore)
     router.delete('/notes/:id/forceDelete', NoteController.forceDelete)
+    router.get('/notes/sort', NoteController.sortList)
+    router.put('/notes/sort/update', NoteController.sortUpdate)
+    router.get('/notes/bookmark', NoteController.bookmarkList)
 }

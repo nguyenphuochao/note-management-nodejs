@@ -1,0 +1,41 @@
+<style>
+    #sortable div {
+        cursor: pointer;
+    }
+
+    #sortable i.fa-sort {
+        font-size: 10px;
+        margin-right: 5px;
+    }
+</style>
+
+<div class="mt-4">
+    <h2>Sắp xếp ghi chú</h2>
+
+    <a href="/notes" class="font-weight-bold"><i class="fa-solid fa-arrow-left"></i> Danh sách ghi chú</a>
+
+    <div class="mt-4">
+
+        <form action="/notes/sort/update" method="POST">
+            <div id="sortable">
+                {{#each notes}}
+                <div class="bg-info text-light pl-2 p-1 mb-2"><i class="fa-solid fa-sort"></i> {{this.name}}</div>
+                {{/each}}
+            </div>
+
+            <div class="mt-4 action">
+                <button class="btn btn-primary btn-sm">Cập nhật</button>
+                <a href="/notes" class="btn btn-warning btn-sm">Quay về</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    // Loaded DOM
+    document.addEventListener("DOMContentLoaded", (event) => {
+        $("#sortable").sortable();
+    });
+
+</script>

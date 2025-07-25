@@ -40,18 +40,22 @@
         // Update title
         document.title = "Quản lí ghi chú | Thông tin tài khoản"
 
-        btnDeleteAvatar.hide();
+        btnDeleteAvatar.hide(); // set default hide preview avatar
 
         // Set preview avatar
         avatarInput.change(function (e) {
             btnDeleteAvatar.show();
             var file = e.target.files[0];
             let url = window.URL.createObjectURL(file);
-            previewAvatar.src = url // update src
+            previewAvatar.src = url // update src image
+
+            // reset value
+            e.target.value = null
         })
 
         // Click button [X] delete avatar
         btnDeleteAvatar.click(function (e) {
+            btnDeleteAvatar.hide();
             previewAvatar.src = ""
         })
     })

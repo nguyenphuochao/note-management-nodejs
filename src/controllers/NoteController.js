@@ -193,6 +193,23 @@ class NoteController {
             .then(() => res.redirect('/notes/trash'))
             .catch(err => console.log(err))
     }
+
+    // [GET] /notes/sort
+    sortList(req, res, next) {
+        Note.find({ userId: req.session.user.id })
+            .then(notes => res.render('notes/sort', { notes: mutipleMongooseToObject(notes) }))
+            .catch(next)
+    }
+
+    sortUpdate(req, res, next) {
+
+    }
+
+    bookmarkList(req, res, next) {
+        Note.find({ userId: req.session.user.id, bookmark: 1 })
+            .then(notes => res.render('notes/bookmark', { notes: mutipleMongooseToObject(notes) }))
+            .catch(next)
+    }
 }
 
 module.exports = new NoteController
