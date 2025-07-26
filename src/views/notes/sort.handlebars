@@ -16,14 +16,15 @@
 
     <div class="mt-4">
 
-        <form action="/notes/sort/update" method="POST">
+        <form action="/notes/sort/update?_method=PATCH" method="POST">
             <div id="sortable">
                 {{#each notes}}
-                <div class="bg-info text-light pl-2 p-1 mb-2"><i class="fa-solid fa-sort"></i> {{this.name}}</div>
+                <div class="bg-info text-light pl-2 p-1 mb-2" data-id="{{this._id}}"><i class="fa-solid fa-sort"></i> {{this.name}}</div>
                 {{/each}}
             </div>
 
             <div class="mt-4 action">
+                <input type="hidden" name="ids">
                 <button class="btn btn-primary btn-sm">Cập nhật</button>
                 <a href="/notes" class="btn btn-warning btn-sm">Quay về</a>
             </div>
@@ -35,7 +36,19 @@
 <script>
     // Loaded DOM
     document.addEventListener("DOMContentLoaded", (event) => {
+        // sortable
         $("#sortable").sortable();
+
+        // submit form
+        $("form").submit(function() {
+            var dataId = [];
+            $("#sortable div").each(function() {
+                var id = $(this).data("id");
+                dataId.push(id);
+            })
+            // update input ids
+            $("input[name='ids']").val(dataId);
+        })
     });
 
 </script>

@@ -76,10 +76,11 @@ class NoteController {
 
         Promise.all([
             Note.find(searchQuery).countDocuments({ userId: req.session.user.id }),
-            searchQuery.skip(skipIndex).limit(limit),
-            Note.countDocumentsWithDeleted({ userId: req.session.user.id, deleted: true })
+            searchQuery.skip(skipIndex).limit(limit).sort({ sort_num: 'asc' }),
+            Note.countDocumentsWithDeleted({ userId: req.session.user.id, deleted: true }),
+            Note.countDocuments({ userId: req.session.user.id, bookmark: 1 })
         ])
-            .then(([totalItems, notes, totalDeleted]) =>
+            .then(([totalItems, notes, totalDeleted, totalBookmark]) =>
                 res.render('notes/index', {
                     notes: mutipleMongooseToObject(notes),
                     s_name,
@@ -93,7 +94,8 @@ class NoteController {
                     totalPage: Math.ceil(totalItems / limit),
                     limit,
                     page,
-                    totalDeleted
+                    totalDeleted,
+                    totalBookmark
                 })
             )
             .catch(next)
@@ -106,24 +108,29 @@ class NoteController {
 
     // [POST] /note/store
     store(req, res) {
-        const formData = {
-            name: req.body.name,
-            description: req.body.description,
-            userId: req.session.user.id,
-            bookmark: 0,
-        }
-        const note = new Note(formData)
-        note.save()
-            .then(() => {
-                // use session alert
-                req.session.message = {
-                    type: 'success',
-                    title: 'Create note successfully'
-                }
+        Note.find({ userId: req.session.user.id }).countDocuments().then(totalNote => {
+            const formData = {
+                name: req.body.name,
+                description: req.body.description,
+                userId: req.session.user.id,
+                bookmark: 0,
+                sort_num: totalNote + 1
+            }
+            const note = new Note(formData)
+            note.save()
+                .then(() => {
+                    // use session alert
+                    req.session.message = {
+                        type: 'success',
+                        title: 'Đã thêm mới ghi chú'
+                    }
 
-                res.redirect('/notes')
-            })
+                    res.redirect('/notes')
+                })
+                .catch(err => console.log(err))
+        })
             .catch(err => console.log(err))
+
     }
 
     // [GET] /note/edit
@@ -166,10 +173,26 @@ class NoteController {
 
     // [PATCH] /notes/:id/bookmark
     bookmark(req, res) {
-        Note.updateOne({ _id: req.params.id }, { bookmark: req.body.bookmark })
-            .then(() => res.json({
-                status: "OK"
-            }))
+        Note.updateOne({ _id: req.params.id },
+            {
+                bookmark: Number(req.body.bookmark) == 1 ? 0 : 1
+            })
+            .then(() => {
+                Promise.all([
+                    Note.findOne({ _id: req.params.id, userId: req.session.user.id }),
+                    Note.countDocuments({ bookmark: 1, userId: req.session.user.id })
+                ])
+                    .then(([
+                        NoteItem,
+                        totalBookmark
+                    ]) => {
+                        res.json({
+                            bookmark: NoteItem.bookmark,
+                            totalBookmark
+                        })
+                    })
+
+            })
             .catch(err => console.log(err))
     }
 
@@ -196,13 +219,29 @@ class NoteController {
 
     // [GET] /notes/sort
     sortList(req, res, next) {
-        Note.find({ userId: req.session.user.id })
+        Note.find({ userId: req.session.user.id }).sort({ sort_num: 'asc' })
             .then(notes => res.render('notes/sort', { notes: mutipleMongooseToObject(notes) }))
             .catch(next)
     }
 
+    // [PATCH] /notes/sort/update
     sortUpdate(req, res, next) {
-
+        var sort_num = 1;
+        var noteIds = (req.body.ids).toString().split(",")
+        for (let i = 0; i < noteIds.length; i++) {
+            Note.updateOne({ _id: noteIds[i] }, {
+                sort_num: sort_num++
+            })
+                .then(() => {
+                    // use session alert
+                    req.session.message = {
+                        type: 'success',
+                        title: 'Đã sắp xếp ghi chú'
+                    }
+                    res.redirect('/notes/sort')
+                })
+                .catch(err => console.log(err))
+        }
     }
 
     bookmarkList(req, res, next) {

@@ -9,6 +9,7 @@ const Note = new Schema({
     description: { type: String, Text: true },
     userId: { type: String, maxLength: 255 },
     bookmark: { type: Number },
+    sort_num: { type: Number },
 }, { timestamps: true });
 
 Note.plugin(mongoose_delete, {

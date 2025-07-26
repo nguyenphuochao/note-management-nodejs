@@ -10,7 +10,7 @@
                 <i class="fa-solid fa-sort"></i> Sắp xếp
             </a>
             <a href="/notes/bookmark" class="btn btn-warning btn-sm font-weight-bold">
-                <i class="fa-solid fa-bookmark"></i> Đánh dấu <span>(0)</span>
+                <i class="fa-solid fa-bookmark"></i> Đánh dấu <span class="total-bookmark">({{totalBookmark}})</span>
             </a>
         </div>
 
@@ -100,8 +100,10 @@
                     <td scope="row">{{sum @index 1 }}</td>
                     <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
                     <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
-                    <td><i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
-                            data-bookmark="{{this.bookmark}}" data-id="{{this._id}}"></i>
+                    <td>
+                        <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
+                            data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
+                        </i>
                     </td>
                     <td>{{vnFullFormat this.createdAt}}</td>
                     <td>{{vnFullFormat this.updatedAt}}</td>
@@ -155,7 +157,6 @@
         </nav>
 
         {{/if}}
-
 
     </div>
 </div>
@@ -261,16 +262,20 @@
         // Click button bookmark
         btnBookmark.click(function () {
             dataID = $(this).data("id")
-            var bookmark = $(this).data("bookmark")
+            var bookmarkId =  $(this).attr("data-bookmark");
 
             $.ajax({
                 url: `/notes/${dataID}/bookmark?_method=PATCH`,
                 type: 'POST',
-                data: { bookmark: bookmark == 1 ? 0 : 1 }
+                data: { bookmark: bookmarkId }
             })
                 .done(function (data) {
+                    console.log("data: ", data);
                     $(`.fa-bookmark-${dataID}`).toggleClass('fa-solid fa-regular')
-                    $(`.fa-bookmark-${dataID}`).attr('data-bookmark', bookmark == 1 ? 0 : 1)
+                    // update data-bookmark in html
+                    $(`.fa-bookmark-${dataID}`).attr('data-bookmark', data.bookmark)
+                    // update totalBookmark in html
+                    $(".total-bookmark").text(`(${data.totalBookmark})`)
                 })
                 .fail(function (error) {
                     console.log("error: ", error);
