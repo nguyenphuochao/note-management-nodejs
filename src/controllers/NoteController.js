@@ -144,56 +144,58 @@ class NoteController {
     // [PUT] /note/update
     update(req, res) {
         Note.updateOne({ _id: req.params.id }, req.body)
-            .then(() => res.redirect('/notes'))
+            .then(() => {
+                // use session alert
+                req.session.message = {
+                    type: 'success',
+                    title: 'Đã cập nhật ghi chú'
+                }
+                res.redirect('/notes')
+            })
             .catch(err => console.log(err))
     }
 
     // [DELETE] /note/destroy
     destroy(req, res) {
         Note.delete({ _id: req.params.id })
-            .then(() => res.redirect('/notes'))
+            .then(() => {
+                // use session alert
+                req.session.message = {
+                    type: 'success',
+                    title: 'Đã xóa ghi chú'
+                }
+                res.redirect('/notes')
+            })
             .catch(err => console.log(err))
     }
 
     // [POST] /notes/copy
     copy(req, res, next) {
-        Note.findById(req.params.id)
-            .then(note => {
+
+        Promise.all([
+            Note.find({ userId: req.session.user.id }).countDocuments(),
+            Note.findById(req.params.id)
+        ])
+            .then(([totalNote, note]) => {
                 const noteData = new Note({
                     name: note.name,
                     description: note.description,
-                    userId: req.session.user.id
+                    userId: req.session.user.id,
+                    bookmark: 0,
+                    sort_num: totalNote + 1
                 })
-                noteData.save()
-                    .then(() => res.redirect('/notes'))
-                    .catch(err => console.log(err))
+                const noteItem = new Note(noteData)
+                noteItem.save()
+                    .then(() => {
+                        req.session.message = {
+                            type: 'success',
+                            title: 'Đã copy ghi chú'
+                        }
+                        res.redirect('/notes')
+                    })
+                    .catch(next)
             })
             .catch(next)
-    }
-
-    // [PATCH] /notes/:id/bookmark
-    bookmark(req, res) {
-        Note.updateOne({ _id: req.params.id },
-            {
-                bookmark: Number(req.body.bookmark) == 1 ? 0 : 1
-            })
-            .then(() => {
-                Promise.all([
-                    Note.findOne({ _id: req.params.id, userId: req.session.user.id }),
-                    Note.countDocuments({ bookmark: 1, userId: req.session.user.id })
-                ])
-                    .then(([
-                        NoteItem,
-                        totalBookmark
-                    ]) => {
-                        res.json({
-                            bookmark: NoteItem.bookmark,
-                            totalBookmark
-                        })
-                    })
-
-            })
-            .catch(err => console.log(err))
     }
 
     // [GET] /notes/trash
@@ -213,7 +215,14 @@ class NoteController {
     // [PATCH] /notes/:id/restore
     restore(req, res) {
         Note.restore({ _id: req.params.id })
-            .then(() => res.redirect('/notes/trash'))
+            .then(() => {
+                // use session alert
+                req.session.message = {
+                    type: 'success',
+                    title: 'Đã khôi phục ghi chú'
+                }
+                res.redirect('/notes/trash')
+            })
             .catch(err => console.log(err))
     }
 
@@ -245,9 +254,44 @@ class NoteController {
     }
 
     bookmarkList(req, res, next) {
-        Note.find({ userId: req.session.user.id, bookmark: 1 })
-            .then(notes => res.render('notes/bookmark', { notes: mutipleMongooseToObject(notes) }))
+        Promise.all([
+            Note.find({ userId: req.session.user.id, bookmark: 1 }),
+            Note.countDocuments({ userId: req.session.user.id, bookmark: 1 })
+        ])
+            .then(([notes, totalNote]) => {
+                res.render('notes/bookmark',
+                    {
+                        notes: mutipleMongooseToObject(notes),
+                        totalNote
+                    }
+                )
+            })
             .catch(next)
+    }
+
+    // [PATCH] /notes/:id/bookmark
+    bookmarkUpdate(req, res) {
+        Note.updateOne({ _id: req.params.id },
+            {
+                bookmark: Number(req.body.bookmark) == 1 ? 0 : 1
+            })
+            .then(() => {
+                Promise.all([
+                    Note.findOne({ _id: req.params.id, userId: req.session.user.id }),
+                    Note.countDocuments({ bookmark: 1, userId: req.session.user.id })
+                ])
+                    .then(([
+                        NoteItem,
+                        totalBookmark
+                    ]) => {
+                        res.json({
+                            bookmark: NoteItem.bookmark,
+                            totalBookmark
+                        })
+                    })
+
+            })
+            .catch(err => console.log(err))
     }
 }
 

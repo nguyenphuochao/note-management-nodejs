@@ -34,11 +34,11 @@ module.exports = function route(router) {
     router.put('/notes/:id', NoteController.update)
     router.delete('/notes/:id', NoteController.destroy)
     router.post('/notes/:id/copy', NoteController.copy)
-    router.patch('/notes/:id/bookmark', NoteController.bookmark)
     router.get('/notes/trash', NoteController.trash)
-    router.patch('/notes/:id/restore', NoteController.restore)
     router.delete('/notes/:id/forceDelete', NoteController.forceDelete)
+    router.patch('/notes/:id/restore', NoteController.restore)
     router.get('/notes/sort', NoteController.sortList)
     router.patch('/notes/sort/update', NoteController.sortUpdate)
     router.get('/notes/bookmark', NoteController.bookmarkList)
+    router.patch('/notes/:id/bookmark', NoteController.bookmarkUpdate)
 }
