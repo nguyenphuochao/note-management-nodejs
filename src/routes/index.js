@@ -41,4 +41,5 @@ module.exports = function route(router) {
     router.patch('/notes/sort/update', NoteController.sortUpdate)
     router.get('/notes/bookmark', NoteController.bookmarkList)
     router.patch('/notes/:id/bookmark', NoteController.bookmarkUpdate)
+    router.patch('/notes/:id/bookmark/uncheck', NoteController.bookmarkUncheck)
 }

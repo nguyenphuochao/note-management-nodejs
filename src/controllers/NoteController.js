@@ -253,6 +253,7 @@ class NoteController {
         }
     }
 
+    // [GET] /notes/bookmark
     bookmarkList(req, res, next) {
         Promise.all([
             Note.find({ userId: req.session.user.id, bookmark: 1 }),
@@ -269,7 +270,7 @@ class NoteController {
             .catch(next)
     }
 
-    // [PATCH] /notes/:id/bookmark
+    // [PATCH] /notes/:id/bookmarkUpdate
     bookmarkUpdate(req, res) {
         Note.updateOne({ _id: req.params.id },
             {
@@ -290,6 +291,21 @@ class NoteController {
                         })
                     })
 
+            })
+            .catch(err => console.log(err))
+    }
+
+    // [PATCH] /notes/:id/bookmarkUncheck
+    bookmarkUncheck(req, res) {
+        Note.updateOne({ _id: req.params.id }, { bookmark: 0 })
+            .then(() => {
+                // use session alert
+                req.session.message = {
+                    type: 'success',
+                    title: 'Đã khôi phục ghi chú'
+                }
+
+                res.redirect('/notes/bookmark')
             })
             .catch(err => console.log(err))
     }

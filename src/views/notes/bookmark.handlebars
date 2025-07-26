@@ -26,7 +26,7 @@
                         <td>{{vnFullFormat this.createdAt}}</td>
                         <td>{{vnFullFormat this.updatedAt}}</td>
                         <td>
-                            <a href="/notes/{{this._id}}/edit" class="btn btn-warning btn-sm btn-edit">
+                            <a href="#" class="btn btn-warning btn-sm btn-uncheck-bookmark" data-id="{{this._id}}">
                                 <i class="fa-solid fa-pen-to-square"></i> Bỏ đánh dấu
                             </a>
                         </td>
@@ -50,10 +50,24 @@
     </div>
 </div>
 
+<form name="form-bookmark" method="POST"></form>
+
 <script>
     // Loaded DOM
     document.addEventListener("DOMContentLoaded", (event) => {
+        var btnUncheckBookmark = $(".btn-uncheck-bookmark")
+        var formBookmark = document.forms['form-bookmark'];
 
+        // Update title
+        document.title = "Quản lí ghi chú | Đánh dấu ghi chú";
+
+        // click uncheck bookmark
+        btnUncheckBookmark.click(function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            formBookmark.action = '/notes/' + id + '/bookmark/uncheck?_method=PATCH';
+            formBookmark.submit();
+        })
     });
 
 </script>
