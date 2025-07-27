@@ -25,6 +25,7 @@
         <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
     </button>
 
+    {{!-- form mutil search --}}
     <form class="form-search" style="display: {{is_dislay_search}}">
         <div class="row mt-3">
             <div class="col-md-4">
@@ -67,6 +68,23 @@
         <button class="btn btn-success btn-sm mt-2">Tìm kiếm</button>
     </form>
 
+    {{!-- Checkall & choose option function --}}
+    <div class="mt-4">
+        <label>
+            <input type="checkbox" class="check-all">
+            Chọn tất cả
+        </label>
+
+        <select name="select-option" id="select-option" required>
+            <option value="">--Vui lòng chọn--</option>
+            <option value="delete">Xóa</option>
+            <option value="bookmark">Đánh dấu</option>
+        </select>
+
+        <button style="background-color: #0069D9;color:white;font-weight: 600">Thực hiện</button>
+    </div>
+
+    {{!-- show count record with select --}}
     <div class="mt-4">
         <label for="select-show-count-record">Hiển thị số lượng : </label>
         <select name="select-show-count-record" id="select-show-count-record">
@@ -81,84 +99,91 @@
         </select>
     </div>
 
-    <div class="mt-2 table-responsive">
-        <table class="table table-hover table-striped">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th style="width: 20%;">Tên ghi chú <a href="#"><i class="fa-solid fa-sort"></i></a></th>
-                    <th style="width: 20%;">Mô tả</th>
-                    <th>Đánh dấu</th>
-                    <th>Ngày tạo</th>
-                    <th>Ngày cập nhật</th>
-                    <th style="width: 20%;">Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each notes}}
-                <tr>
-                    <td scope="row">{{sum @index 1 }}</td>
-                    <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
-                    <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
-                    <td>
-                        <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
-                            data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
-                        </i>
-                    </td>
-                    <td>{{vnFullFormat this.createdAt}}</td>
-                    <td>{{vnFullFormat this.updatedAt}}</td>
-                    <td>
-                        <a href="/notes/{{this._id}}/edit" class="btn btn-warning btn-sm btn-edit">
-                            <i class="fa-solid fa-pen-to-square"></i> Sửa
-                        </a>
-                        <a href="#" class="btn btn-danger btn-sm btn-delete" data-toggle="modal"
-                            data-target="#modalConfirmDelete" data-id="{{this._id}}">
-                            <i class="fa-solid fa-trash-can"></i> Xóa
-                        </a>
-                        <a href="#" class="btn btn-success btn-sm btn-copy" data-toggle="modal"
-                            data-target="#modalConfirmCopy" data-id="{{this._id}}">
-                            <i class="fa-solid fa-copy"></i> Sao chép
-                        </a>
-                    </td>
-                </tr>
-                {{else}}
-                <tr>
-                    <td colspan="7" class="text-center">Không tìm thấy ghi chú. <a href="/notes/create">Thêm mới ghi
-                            chú</a></td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
+    <form action="/notes/" method="POST">
+        {{!-- table --}}
+        <div class="mt-2 table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>#</th>
+                        <th style="width: 20%;">Tên ghi chú <a href="#"><i class="fa-solid fa-sort"></i></a></th>
+                        <th style="width: 20%;">Mô tả</th>
+                        <th>Đánh dấu</th>
+                        <th>Ngày tạo</th>
+                        <th>Ngày cập nhật</th>
+                        <th style="width: 20%;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each notes}}
+                    <tr>
+                        <td><input type="checkbox" name="noteIds[]" class="noteIds"></td>
+                        <td scope="row">{{sum @index 1 }}</td>
+                        <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
+                        <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
+                        <td>
+                            <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
+                                data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
+                            </i>
+                        </td>
+                        <td>{{vnFullFormat this.createdAt}}</td>
+                        <td>{{vnFullFormat this.updatedAt}}</td>
+                        <td>
+                            <a href="/notes/{{this._id}}/edit" class="btn btn-warning btn-sm btn-edit">
+                                <i class="fa-solid fa-pen-to-square"></i> Sửa
+                            </a>
+                            <a href="#" class="btn btn-danger btn-sm btn-delete" data-toggle="modal"
+                                data-target="#modalConfirmDelete" data-id="{{this._id}}">
+                                <i class="fa-solid fa-trash-can"></i> Xóa
+                            </a>
+                            <a href="#" class="btn btn-success btn-sm btn-copy" data-toggle="modal"
+                                data-target="#modalConfirmCopy" data-id="{{this._id}}">
+                                <i class="fa-solid fa-copy"></i> Sao chép
+                            </a>
+                        </td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td colspan="7" class="text-center">Không tìm thấy ghi chú. <a href="/notes/create">Thêm mới ghi
+                                chú</a></td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
 
-        <div class="total-items">
-            <p>Số lượng ghi chú: <b>{{totalItems}}</b></p>
+            <div class="total-items">
+                <p>Số lượng ghi chú: <b>{{totalItems}}</b></p>
+            </div>
+
+            {{!-- Pagination --}}
+
+            {{#if notes}}
+
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item {{prevPage page}}">
+                        <a class="page-link" href="?page={{subtract page 1}}" tabindex="-1">Previous</a>
+                    </li>
+
+                    {{#each (pagination totalPage)}}
+                    <li class="page-item {{active this @root.page}}"><a class="page-link page-item-link"
+                            href="?page={{this}}">{{this}}</a>
+                    </li>
+                    {{/each}}
+
+                    <li class="page-item {{nextPage page totalPage}}">
+                        <a class="page-link" href="?page={{sum page 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+            {{/if}}
+
         </div>
 
-        {{!-- Pagination --}}
+    </form>
 
-        {{#if notes}}
-
-        <nav>
-            <ul class="pagination">
-                <li class="page-item {{prevPage page}}">
-                    <a class="page-link" href="?page={{subtract page 1}}" tabindex="-1">Previous</a>
-                </li>
-
-                {{#each (pagination totalPage)}}
-                <li class="page-item {{active this @root.page}}"><a class="page-link page-item-link"
-                        href="?page={{this}}">{{this}}</a>
-                </li>
-                {{/each}}
-
-                <li class="page-item {{nextPage page totalPage}}">
-                    <a class="page-link" href="?page={{sum page 1}}">Next</a>
-                </li>
-            </ul>
-        </nav>
-
-        {{/if}}
-
-    </div>
 </div>
 
 {{!-- Form submit request server --}}
@@ -262,7 +287,7 @@
         // Click button bookmark
         btnBookmark.click(function () {
             dataID = $(this).data("id")
-            var bookmarkId =  $(this).attr("data-bookmark");
+            var bookmarkId = $(this).attr("data-bookmark");
 
             $.ajax({
                 url: `/notes/${dataID}/bookmark?_method=PATCH`,
@@ -280,8 +305,17 @@
                 .fail(function (error) {
                     console.log("error: ", error);
                 })
+        })
 
-
+        // check all
+        $(".check-all").change(function() {
+            if ($(this).is(':checked')) {
+                console.log('checked')
+                $(".noteIds").prop('checked', true)
+            } else {
+                console.log('un-checked')
+                $(".noteIds").prop('checked', false)
+            }
         })
     })
 </script>
