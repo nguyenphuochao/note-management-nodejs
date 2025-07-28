@@ -10,12 +10,18 @@ class RegisterController {
 
     // [POST] /register
     register(req, res) {
+        // validate
+
+
+        // success
         const userData = {
             fullname: req.body.fullname,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, saltRounds)
         }
+
         const user = new User(userData)
+
         user.save()
             .then(() => res.redirect('/login'))
             .catch(err => console.log(err))

@@ -309,6 +309,44 @@ class NoteController {
             })
             .catch(err => console.log(err))
     }
+
+    // [POST] /notes/handle-form-actions
+    handleFormActions(req, res, next) {
+        switch (req.body.action) {
+            case 'delete':
+                Note.delete({ _id: { $in: req.body.noteIds } })
+                    .then(() => {
+                        // use session alert
+                        req.session.message = {
+                            type: 'success',
+                            title: 'Đã xóa ghi chú'
+                        }
+                        res.redirect('/notes')
+                    })
+                    .catch(next)
+                break;
+
+            case 'bookmark':
+                const newValues = { bookmark: 1 }
+                Note.updateMany(
+                    { _id: { $in: req.body.noteIds } }, { bookmark: 1 },
+                    { $set: newValues }
+                )
+                    .then(() => {
+                        // use session alert
+                        req.session.message = {
+                            type: 'success',
+                            title: 'Đã đánh dấu ghi chú'
+                        }
+                        res.redirect('/notes')
+                    })
+                    .catch(next)
+                break;
+
+            default:
+                res.json({ message: 'Action is invalid' })
+        }
+    }
 }
 
 module.exports = new NoteController

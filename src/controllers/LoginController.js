@@ -10,19 +10,19 @@ class LoginController {
 
     // [POST] /login
     login(req, res) {
-        const user = User.findOne({ email: req.body.email })
+        User.findOne({ email: req.body.email })
             .then(user => {
                 if (!user) {
                     return res.json({
-                        status_code: 422,
-                        message: 'Tài khoản người dùng không tồn tại'
+                        status_code: 401,
+                        message: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ'
                     })
                 }
 
                 const result = bcrypt.compareSync(req.body.password, user.password);
                 if (!result) {
                     return res.json({ 
-                        status_code: 422,
+                        status_code: 401,
                         message: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ' 
                     })
                 }

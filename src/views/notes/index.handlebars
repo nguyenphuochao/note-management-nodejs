@@ -72,20 +72,20 @@
     </form>
 
     {{!-- Checkall & choose option function --}}
-    <form action="/notes/update-select-option" method="POST">
+    <form name="handle-form-actions" action="/notes/handle-form-actions" method="POST">
         <div class="mt-4">
             <label>
                 <input type="checkbox" class="check-all">
                 Chọn tất cả
             </label>
 
-            <select name="select-option" id="select-option" required>
+            <select style="height: 35px;" name="action" id="action" required>
                 <option value="">--Vui lòng chọn--</option>
                 <option value="delete">Xóa</option>
                 <option value="bookmark">Đánh dấu</option>
             </select>
 
-            <button style="background-color: #0069D9;color:white;font-weight: 600">Thực hiện</button>
+            <button class="btn btn-primary btn-sm">Thực hiện</button>
         </div>
 
         {{!-- show count record with select --}}
@@ -121,7 +121,7 @@
                 <tbody>
                     {{#each notes}}
                     <tr>
-                        <td><input type="checkbox" name="noteIds[]" class="noteIds"></td>
+                        <td><input type="checkbox" name="noteIds[]" value="{{this._id}}" class="noteIds"></td>
                         <td scope="row">{{sum @index 1 }}</td>
                         <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
                         <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
@@ -245,6 +245,8 @@
         var btnCopyConfirm = $(".btn-copy-confirm")
         var btnBookmark = $(".btn-bookmark")
         var showSelectCountRecord = $("#select-show-count-record")
+        var handleFormActions = document.forms['handle-form-actions']
+        var btnHandleFormAction = $(".btn-handle-form-actions")
         var dataID = null;
 
         // Update title
@@ -311,11 +313,9 @@
         // check all
         $(".check-all").change(function () {
             if ($(this).is(':checked')) {
-                console.log('checked')
-                $(".noteIds").prop('checked', true)
+                $("input[name='noteIds[]']").prop('checked', true)
             } else {
-                console.log('un-checked')
-                $(".noteIds").prop('checked', false)
+                $("input[name='noteIds[]']").prop('checked', false)
             }
         })
     })

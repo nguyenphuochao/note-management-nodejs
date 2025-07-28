@@ -42,4 +42,5 @@ module.exports = function route(router) {
     router.get('/notes/bookmark', NoteController.bookmarkList)
     router.patch('/notes/:id/bookmark', NoteController.bookmarkUpdate)
     router.patch('/notes/:id/bookmark/uncheck', NoteController.bookmarkUncheck)
+    router.post('/notes/handle-form-actions', NoteController.handleFormActions)
 }
