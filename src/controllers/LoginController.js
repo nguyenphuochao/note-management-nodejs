@@ -33,6 +33,7 @@ class LoginController {
                     email: user.email,
                     fullname: user.fullname
                 };
+                
                 res.redirect('/')
             })
             .catch(err => console.log(err))
