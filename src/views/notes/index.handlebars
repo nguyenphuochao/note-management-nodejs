@@ -1,6 +1,8 @@
 <div class="mt-4">
+
     <h2>Danh sách ghi chú</h2>
 
+    {{!-- actions button --}}
     <div class="d-flex justify-content-between">
         <div>
             <a href="/notes/create" class="btn btn-primary btn-sm font-weight-bold">
@@ -66,40 +68,41 @@
         </div>
 
         <button class="btn btn-success btn-sm mt-2">Tìm kiếm</button>
+
     </form>
 
     {{!-- Checkall & choose option function --}}
-    <div class="mt-4">
-        <label>
-            <input type="checkbox" class="check-all">
-            Chọn tất cả
-        </label>
+    <form action="/notes/update-select-option" method="POST">
+        <div class="mt-4">
+            <label>
+                <input type="checkbox" class="check-all">
+                Chọn tất cả
+            </label>
 
-        <select name="select-option" id="select-option" required>
-            <option value="">--Vui lòng chọn--</option>
-            <option value="delete">Xóa</option>
-            <option value="bookmark">Đánh dấu</option>
-        </select>
+            <select name="select-option" id="select-option" required>
+                <option value="">--Vui lòng chọn--</option>
+                <option value="delete">Xóa</option>
+                <option value="bookmark">Đánh dấu</option>
+            </select>
 
-        <button style="background-color: #0069D9;color:white;font-weight: 600">Thực hiện</button>
-    </div>
+            <button style="background-color: #0069D9;color:white;font-weight: 600">Thực hiện</button>
+        </div>
 
-    {{!-- show count record with select --}}
-    <div class="mt-4">
-        <label for="select-show-count-record">Hiển thị số lượng : </label>
-        <select name="select-show-count-record" id="select-show-count-record">
-            <option value="10" {{selected 10 limit}}>10</option>
-            <option value="30" {{selected 30 limit}}>30</option>
-            <option value="50" {{selected 50 limit}}>50</option>
-            <option value="100" {{selected 100 limit}}>100</option>
-            <option value="150" {{selected 150 limit}}>150</option>
-            <option value="250" {{selected 250 limit}}>250</option>
-            <option value="500" {{selected 500 limit}}>500</option>
-            <option value="1000" {{selected 1000 limit}}>1000</option>
-        </select>
-    </div>
+        {{!-- show count record with select --}}
+        <div class="mt-4">
+            <label for="select-show-count-record">Hiển thị số lượng : </label>
+            <select name="select-show-count-record" id="select-show-count-record">
+                <option value="10" {{selected 10 limit}}>10</option>
+                <option value="30" {{selected 30 limit}}>30</option>
+                <option value="50" {{selected 50 limit}}>50</option>
+                <option value="100" {{selected 100 limit}}>100</option>
+                <option value="150" {{selected 150 limit}}>150</option>
+                <option value="250" {{selected 250 limit}}>250</option>
+                <option value="500" {{selected 500 limit}}>500</option>
+                <option value="1000" {{selected 1000 limit}}>1000</option>
+            </select>
+        </div>
 
-    <form action="/notes/" method="POST">
         {{!-- table --}}
         <div class="mt-2 table-responsive">
             <table class="table table-hover table-striped">
@@ -181,9 +184,7 @@
             {{/if}}
 
         </div>
-
     </form>
-
 </div>
 
 {{!-- Form submit request server --}}
@@ -308,7 +309,7 @@
         })
 
         // check all
-        $(".check-all").change(function() {
+        $(".check-all").change(function () {
             if ($(this).is(':checked')) {
                 console.log('checked')
                 $(".noteIds").prop('checked', true)
