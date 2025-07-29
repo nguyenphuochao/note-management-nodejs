@@ -85,7 +85,7 @@ class NoteController {
                     notes: mutipleMongooseToObject(notes),
                     s_name,
                     s_desc,
-                    is_dislay_search: is_dislay_search ? 'block' : 'none',
+                    is_dislay_search,
                     s_createdAtFrom,
                     s_createdAtTo,
                     s_updatedAtFrom,
@@ -327,21 +327,43 @@ class NoteController {
                 break;
 
             case 'bookmark':
-                const newValues = { bookmark: 1 }
-                Note.updateMany(
-                    { _id: { $in: req.body.noteIds } }, { bookmark: 1 },
-                    { $set: newValues }
-                )
-                    .then(() => {
-                        // use session alert
-                        req.session.message = {
-                            type: 'success',
-                            title: 'Đã đánh dấu ghi chú'
-                        }
-                        res.redirect('/notes')
-                    })
-                    .catch(next)
-                break;
+                {
+                    const newValues = { bookmark: 1 }
+                    Note.updateMany(
+                        { _id: { $in: req.body.noteIds } },
+                        { $set: newValues }
+                    )
+                        .then(() => {
+                            // use session alert
+                            req.session.message = {
+                                type: 'success',
+                                title: 'Đã đánh dấu ghi chú'
+                            }
+                            res.redirect('/notes')
+                        })
+                        .catch(next)
+                    break;
+                }
+
+
+            case 'unbookmark':
+                {
+                    const newValues = { bookmark: 0 }
+                    Note.updateMany(
+                        { _id: { $in: req.body.noteIds } },
+                        { $set: newValues }
+                    )
+                        .then(() => {
+                            // use session alert
+                            req.session.message = {
+                                type: 'success',
+                                title: 'Đã hủy đánh dấu ghi chú'
+                            }
+                            res.redirect('/notes')
+                        })
+                        .catch(next)
+                    break;
+                }
 
             default:
                 res.json({ message: 'Action is invalid' })

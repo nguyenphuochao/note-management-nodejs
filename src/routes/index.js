@@ -14,6 +14,7 @@ module.exports = function route(router) {
     // register
     router.get('/register', RegisterController.index)
     router.post('/register', RegisterController.register)
+    router.get('/check-email-exist', RegisterController.checkEmailExist)
 
     // rediect default
     router.get('/', function (req, res) {

@@ -24,11 +24,11 @@
     </div>
 
     <button class="btn btn-success btn-sm mt-2 btn-search font-weight-bold">
-        <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+        <i class="fa-solid {{{iconSearch is_dislay_search}}}"></i> Tìm kiếm
     </button>
 
     {{!-- form mutil search --}}
-    <form class="form-search" style="display: {{is_dislay_search}}">
+    <form class="form-search" style="display: {{displaySearch is_dislay_search}}">
         <div class="row mt-3">
             <div class="col-md-4">
                 <label for="name">Tên ghi chú</label>
@@ -67,7 +67,10 @@
             </div>
         </div>
 
-        <button class="btn btn-success btn-sm mt-2">Tìm kiếm</button>
+        <button class="btn btn-success btn-sm mt-2">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Tìm kiếm
+        </button>
 
     </form>
 
@@ -83,9 +86,10 @@
                 <option value="">--Vui lòng chọn--</option>
                 <option value="delete">Xóa</option>
                 <option value="bookmark">Đánh dấu</option>
+                <option value="unbookmark">Hủy đánh dấu</option>
             </select>
 
-            <button class="btn btn-primary btn-sm">Thực hiện</button>
+            <button disabled class="btn btn-primary btn-sm btn-handle-form-actions">Thực hiện</button>
         </div>
 
         {{!-- show count record with select --}}
@@ -236,21 +240,34 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        let isChecked = false
+
         var formDelete = $(".form-delete")
         var formCopy = $(".form-copy")
         var formBookmark = $(".form-bookmark")
+
+        var btnSearch = $(".btn-search")
         var btnDelete = $(".btn-delete")
         var btnCopy = $(".btn-copy")
         var btnDeleteConfirm = $(".btn-delete-confirm")
         var btnCopyConfirm = $(".btn-copy-confirm")
         var btnBookmark = $(".btn-bookmark")
+        var btnHandleFormAction = $(".btn-handle-form-actions")
+
         var showSelectCountRecord = $("#select-show-count-record")
         var handleFormActions = document.forms['handle-form-actions']
-        var btnHandleFormAction = $(".btn-handle-form-actions")
+        var checkAll = $(".check-all")
+        var inputNoteIds = $("input[name='noteIds[]']")
+     
         var dataID = null;
 
         // Update title
         document.title = "Quản lí ghi chú | Danh sách"
+
+        // Click button search toogle
+        btnSearch.click(function () {
+            $(this).children("i").toggleClass("fa-plus fa-minus");
+        })
 
         // Click button delete
         btnDelete.click(function () {
@@ -310,13 +327,35 @@
                 })
         })
 
-        // check all
-        $(".check-all").change(function () {
+        // Check all
+        checkAll.change(function () {
             if ($(this).is(':checked')) {
-                $("input[name='noteIds[]']").prop('checked', true)
+                inputNoteIds.prop('checked', true)
             } else {
-                $("input[name='noteIds[]']").prop('checked', false)
+                inputNoteIds.prop('checked', false)
             }
+            renderCheckAllSubmitBtn()
         })
+
+        // Note item checkbox change
+        inputNoteIds.change(function () {
+            if (inputNoteIds.filter(':checked').length == inputNoteIds.length) {
+                checkAll.prop('checked', true)
+            } else {
+                checkAll.prop('checked', false)
+            }
+            renderCheckAllSubmitBtn()
+        })
+
+        //  Re-render check all submit button
+        function renderCheckAllSubmitBtn() {
+            var checkedCount = $('input[name="noteIds[]"]:checked').length;
+
+            if (checkedCount > 0) {
+                btnHandleFormAction.attr('disabled', false);
+            } else {
+                btnHandleFormAction.attr('disabled', true);
+            }
+        }
     })
 </script>

@@ -61,6 +61,12 @@ app.engine('handlebars', engine({
         },
         bookmarkIcon: (bookmark) => {
             return bookmark == 1 ? 'fa-solid' : 'fa-regular'
+        },
+        displaySearch: (isDisplay) => {
+            return isDisplay ? 'block' : 'none'
+        },
+        iconSearch: (isDisplay) => {
+            return isDisplay ? 'fa-minus' : 'fa-plus'
         }
     }
 }));

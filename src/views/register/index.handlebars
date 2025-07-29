@@ -1,24 +1,28 @@
-<form class="mt-5" action="/register" method="POST" >
+<form class="mt-5 register" action="/register" method="POST" >
+
+    {{!-- use session message alert --}}
+    <div class="mt-2 font-weight-bold alert alert-{{ message.type }}">{{message.title}}</div>
+
     <h2 class="text-center">Đăng kí</h2>
 
     <div class="form-group">
         <label for="fullname">Tên của bạn</label>
-        <input type="text" class="form-control" id="fullname" placeholder="Vui lòng nhập tên của bạn" name="fullname" required>
+        <input type="text" class="form-control" id="fullname" placeholder="Vui lòng nhập tên của bạn" name="fullname">
     </div>
 
     <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" placeholder="Vui lòng nhập email" name="email" required>
+        <input type="email" class="form-control" id="email" placeholder="Vui lòng nhập email" name="email">
     </div>
 
     <div class="form-group">
         <label for="password">Mật khẩu</label>
-        <input type="text" class="form-control" id="password" placeholder="Vui lòng nhập mật khẩu" name="password" required>
+        <input type="text" class="form-control" id="password" placeholder="Vui lòng nhập mật khẩu" name="password">
     </div>
 
     <div class="form-group">
         <label for="password_confirm">Nhập lại mật khẩu</label>
-        <input type="text" class="form-control" id="password_confirm" placeholder="Vui lòng nhập lại mật khẩu" name="password_confirm" required>
+        <input type="text" class="form-control" id="password_confirm" placeholder="Vui lòng nhập lại mật khẩu" name="password_confirm">
     </div>
 
     <div>
