@@ -1,25 +1,23 @@
 <form class="mt-5 login" action="/login" method="POST">
+
+    {{!-- use session message alert --}}
+    <div class="mt-2 font-weight-bold alert alert-{{ message.type }}">{{message.title}}</div>
+
     <h2 class="text-center">Đăng nhập</h2>
 
     <div class="form-group">
         <label for="email">Email</label>
         <input type="text" class="form-control" id="email" placeholder="Vui lòng nhập email" name="email">
-        <div class="invalid-feedback">
-            Vui lòng nhập email
-        </div>
     </div>
 
     <div class="form-group">
         <label for="password">Mật khẩu</label>
         <input type="password" class="form-control" id="password" placeholder="Vui lòng nhập mật khẩu" name="password">
-        <div class="invalid-feedback">
-            Vui lòng nhập password
-        </div>
     </div>
 
     <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="password">
-        <label class="form-check-label" for="password">Hiển thị mật khẩu</label>
+        <input type="checkbox" class="form-check-input" id="form-check-input">
+        <label class="form-check-label" for="form-check-input">Hiển thị mật khẩu</label>
     </div>
 
     <div class="mt-4">
@@ -39,7 +37,7 @@
         document.title = "Đăng nhập"
 
         // click checkbox show password
-        $('#password').change(function () {
+        $('#form-check-input').change(function () {
             if ($(this).is(':checked')) {
                 $('#password').attr('type', 'text')
             } else {

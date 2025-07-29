@@ -8,14 +8,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // validate form login
-    $("form.login").validate({
+    $(".login").validate({
         rules: {
             email: {
                 required: true,
+                email: true
             },
             password: {
                 required: true,
-                email: true
             },
         },
         messages: {
@@ -25,15 +25,15 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             password: {
                 required: "Vui lòng nhập password",
-               
+
             },
         },
-        errorClass: 'help-block',
+        errorClass: 'invalid-feedback',
         highlight: function (element) {
-            $(element).parent().addClass('has-error'); // element là input hiện tại
+            $(element).parent().children('input').addClass('is-invalid'); // element is current input
         },
         unhighlight: function (element) {
-            $(element).parent().removeClass('has-error');
+            $(element).parent().children('input').removeClass('is-invalid');
         },
         // submit form
         submitHandler: function (form) {

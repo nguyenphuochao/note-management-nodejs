@@ -13,27 +13,31 @@ class LoginController {
         User.findOne({ email: req.body.email })
             .then(user => {
                 if (!user) {
-                    return res.json({
-                        status_code: 401,
-                        message: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ'
-                    })
+                    // use session alert
+                    req.session.message = {
+                        type: 'danger',
+                        title: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ'
+                    }
+                    return res.redirect('/login')
                 }
 
                 const result = bcrypt.compareSync(req.body.password, user.password);
                 if (!result) {
-                    return res.json({ 
-                        status_code: 401,
-                        message: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ' 
-                    })
+                    // use session alert
+                    req.session.message = {
+                        type: 'danger',
+                        title: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ'
+                    }
+                    return res.redirect('/login')
                 }
-                
+
                 // set session user
                 req.session.user = {
                     id: user._id,
                     email: user.email,
                     fullname: user.fullname
                 };
-                
+
                 res.redirect('/')
             })
             .catch(err => console.log(err))
