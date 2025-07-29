@@ -19,7 +19,7 @@
 
     <div class="form-check">
         <input type="checkbox" class="form-check-input" id="password">
-        <label class="form-check-label" for="show-password">Hiển thị mật khẩu</label>
+        <label class="form-check-label" for="password">Hiển thị mật khẩu</label>
     </div>
 
     <div class="mt-4">
@@ -46,33 +46,6 @@
                 $('#password').attr('type', 'password')
             }
         })
-
-        // Login submit form
-        $('.login').submit(function (e) {
-            e.preventDefault();
-            var emailInput = $('#email').val();
-            var passwordInput = $('#password').val();
-
-            // reset error
-            $('#email').removeClass('is-invalid');
-            $('#password').removeClass('is-invalid');
-
-            let isSuccess = true;
-
-            if (emailInput.trim() == '') {
-                $('#email').addClass('is-invalid');
-                isSuccess = false;
-            }
-
-            if (passwordInput.trim() == '') {
-                $('#password').addClass('is-invalid');
-                isSuccess = false;
-            }
-
-            if (isSuccess) {
-                this.submit();
-            }
-        });
     });
 
 </script>

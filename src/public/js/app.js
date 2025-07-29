@@ -6,34 +6,59 @@ document.addEventListener('DOMContentLoaded', function () {
     btnSearch.click(function () {
         formSearch.slideToggle();
     });
+
+    // validate form login
+    $("form.login").validate({
+        rules: {
+            email: {
+                required: true,
+            },
+            password: {
+                required: true,
+                email: true
+            },
+        },
+        messages: {
+            email: {
+                required: "Vui lòng nhập email",
+                email: "Email chưa đúng định dạng"
+            },
+            password: {
+                required: "Vui lòng nhập password",
+               
+            },
+        },
+        errorClass: 'help-block',
+        highlight: function (element) {
+            $(element).parent().addClass('has-error'); // element là input hiện tại
+        },
+        unhighlight: function (element) {
+            $(element).parent().removeClass('has-error');
+        },
+        // submit form
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
 })
 
-function getUpdatedParam(k, v) {//sort, price-asc
+function getUpdatedParam(k, v) {
     var params = {};
-    //params = {"c":"proudct", "category_id":"5", "sort": "price-desc"}
-    // window.location.search = "?c=product&price-range=200000-300000&sort=price-desc"
     window.location.search
         .replace(/[?&]+([^=&]+)=([^&]*)/gi, function (str, key, value) {
             params[key] = value;
-            // alert(str);
-            // alert(key);
-            // alert(value);
-
         }
         );
 
-    //{c:"proudct", category_id:"5", sort: "price-desc"}
     params[k] = v;
     if (v == "") {
         delete params[k];
     }
 
-    var x = [];//là array
+    var x = [];
     for (p in params) {
-        //x[0] = 'c=product'
-        //x[1] = 'category_id=5'
-        //x[2] = 'sort=price-asc'
         x.push(p + "=" + params[p]);
     }
-    return str_param = x.join("&");//c=product&category_id=5&sort=price-asc
+    return str_param = x.join("&");
 }
