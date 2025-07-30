@@ -25,6 +25,7 @@ app.engine('handlebars', engine({
         vnFullFormat: (datetime) => {
             const date = new Date(datetime);
             const vnFullFormat = date.toLocaleString("vi-VN", {
+                timeZone: "Asia/Ho_Chi_Minh", // ✅ Force GMT+7
                 weekday: "long", // show day
                 day: "2-digit",
                 month: "2-digit",
