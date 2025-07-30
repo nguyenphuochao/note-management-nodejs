@@ -119,10 +119,12 @@
                         <th></th>
                         <th>#</th>
                         <th style="width: 20%;">Tên ghi chú {{{sortable 'name' _sort}}}</th>
-                        <th class="{{showColumn is_show_desc}}" style="width: 20%;">Mô tả {{{sortable 'description' _sort}}}</th>
+                        <th class="{{showColumn is_show_desc}}" style="width: 20%;">Mô tả {{{sortable 'description'
+                            _sort}}}</th>
                         <th class="{{showColumn is_show_bookmark}}">Đánh dấu {{{sortable 'bookmark' _sort}}}</th>
                         <th class="{{showColumn is_show_created_at}}">Ngày tạo {{{sortable 'createdAt' _sort}}}</th>
-                        <th class="{{showColumn is_show_updated_at}}">Ngày cập nhật {{{sortable 'updatedAt' _sort}}}</th>
+                        <th class="{{showColumn is_show_updated_at}}">Ngày cập nhật {{{sortable 'updatedAt' _sort}}}
+                        </th>
                         <th style="width: 19%;">Thao tác</th>
                     </tr>
                 </thead>
@@ -132,7 +134,8 @@
                         <td><input type="checkbox" name="noteIds[]" value="{{this._id}}" class="noteIds"></td>
                         <td scope="row">{{sum @index 1 }}</td>
                         <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
-                        <td class="{{showColumn @root.is_show_desc}}"><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
+                        <td class="{{showColumn @root.is_show_desc}}"><span
+                                class="text-truncate-line-clamp-2">{{this.description}}</span></td>
                         <td class="{{showColumn @root.is_show_bookmark}}">
                             <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
                                 data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
@@ -162,36 +165,36 @@
                     {{/each}}
                 </tbody>
             </table>
-
-            <div class="total-items">
-                <p>Số lượng ghi chú: <b>{{totalItems}}</b></p>
-            </div>
-
-            {{!-- Pagination --}}
-
-            {{#if notes}}
-
-            <nav>
-                <ul class="pagination">
-                    <li class="page-item {{prevPage page}}">
-                        <a class="page-link" href="?page={{subtract page 1}}" tabindex="-1">Previous</a>
-                    </li>
-
-                    {{#each (pagination totalPage)}}
-                    <li class="page-item {{active this @root.page}}"><a class="page-link page-item-link"
-                            href="?page={{this}}">{{this}}</a>
-                    </li>
-                    {{/each}}
-
-                    <li class="page-item {{nextPage page totalPage}}">
-                        <a class="page-link" href="?page={{sum page 1}}">Next</a>
-                    </li>
-                </ul>
-            </nav>
-
-            {{/if}}
-
         </div>
+
+        <div class="total-items">
+            <p>Số lượng ghi chú: <b>{{totalItems}}</b></p>
+        </div>
+
+        {{!-- Pagination --}}
+
+        {{#if notes}}
+
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {{prevPage page}}">
+                    <a class="page-link" href="?page={{subtract page 1}}" tabindex="-1">Previous</a>
+                </li>
+
+                {{#each (pagination totalPage)}}
+                <li class="page-item {{active this @root.page}}"><a class="page-link page-item-link"
+                        href="?page={{this}}">{{this}}</a>
+                </li>
+                {{/each}}
+
+                <li class="page-item {{nextPage page totalPage}}">
+                    <a class="page-link" href="?page={{sum page 1}}">Next</a>
+                </li>
+            </ul>
+        </nav>
+
+        {{/if}}
+
     </form>
 </div>
 
@@ -256,22 +259,26 @@
             <div class="modal-body">
                 <form action="/apps/{{app_id}}?_method=PUT" method="POST" name="form-show-column">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="is_show_desc" value="1" {{checkedColumn is_show_desc}}>
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="is_show_desc"
+                            value="1" {{checkedColumn is_show_desc}}>
                         <label class="form-check-label" for="inlineCheckbox1">Mô tả</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="is_show_bookmark" value="1" {{checkedColumn is_show_bookmark}}>
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="is_show_bookmark"
+                            value="1" {{checkedColumn is_show_bookmark}}>
                         <label class="form-check-label" for="inlineCheckbox2">Đánh dấu</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="is_show_created_at" value="1" {{checkedColumn is_show_created_at}}>
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="is_show_created_at"
+                            value="1" {{checkedColumn is_show_created_at}}>
                         <label class="form-check-label" for="inlineCheckbox3">Ngày tạo</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="is_show_updated_at" value="1" {{checkedColumn is_show_updated_at}}>
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="is_show_updated_at"
+                            value="1" {{checkedColumn is_show_updated_at}}>
                         <label class="form-check-label" for="inlineCheckbox4">Ngày cập nhật</label>
                     </div>
                 </form>
