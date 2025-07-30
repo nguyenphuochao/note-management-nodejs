@@ -1,6 +1,6 @@
 <div class="mt-5">
     <h2>Thông tin tài khoản</h2>
-    <form action="/profile/update" method="POST">
+    <form action="/profile?_method=PUT" method="POST">
         <div class="form-group">
             <label for="fullname">Họ và tên</label>
             <input type="text" class="form-control" id="fullname" name="fullname" value="{{user.fullname}}" required>

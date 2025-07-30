@@ -1,4 +1,4 @@
-const Note = require("../models/Note");
+const App = require("../models/App");
 const User = require("../models/User")
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -32,7 +32,18 @@ class RegisterController {
                 const createUser = new User(userData)
 
                 createUser.save()
-                    .then(() => res.redirect('/login'))
+                    .then((user) => {
+                        const appData = {
+                            is_show_bookmark: 1,
+                            is_show_created_at: 1,
+                            is_show_desc: 1,
+                            is_show_updated_at: 1,
+                            userId: user._id
+                        }
+                        const createApp = new App(appData)
+                        createApp.save();
+                        res.redirect('/login')
+                    })
                     .catch(err => console.log(err))
             })
             .catch(err => console.log(err))

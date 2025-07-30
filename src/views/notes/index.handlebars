@@ -2,7 +2,7 @@
 
     <h2>Danh sách ghi chú</h2>
 
-    {{!-- actions button --}}
+    {{!-- action button --}}
     <div class="d-flex justify-content-between">
         <div>
             <a href="/notes/create" class="btn btn-primary btn-sm font-weight-bold">
@@ -13,6 +13,10 @@
             </a>
             <a href="/notes/bookmark" class="btn btn-warning btn-sm font-weight-bold">
                 <i class="fa-solid fa-bookmark"></i> Đánh dấu <span class="total-bookmark">({{totalBookmark}})</span>
+            </a>
+            <a href="#" class="btn btn-purple btn-sm font-weight-bold" data-toggle="modal"
+                data-target="#modalShowColumn">
+                Hiển thị cột
             </a>
         </div>
 
@@ -114,12 +118,12 @@
                     <tr>
                         <th></th>
                         <th>#</th>
-                        <th style="width: 20%;">Tên ghi chú <a href="#"><i class="fa-solid fa-sort"></i></a></th>
-                        <th style="width: 20%;">Mô tả</th>
-                        <th>Đánh dấu</th>
-                        <th>Ngày tạo</th>
-                        <th>Ngày cập nhật</th>
-                        <th style="width: 20%;">Thao tác</th>
+                        <th style="width: 20%;">Tên ghi chú {{{sortable 'name' _sort}}}</th>
+                        <th class="{{showColumn is_show_desc}}" style="width: 20%;">Mô tả {{{sortable 'description' _sort}}}</th>
+                        <th class="{{showColumn is_show_bookmark}}">Đánh dấu {{{sortable 'bookmark' _sort}}}</th>
+                        <th class="{{showColumn is_show_created_at}}">Ngày tạo {{{sortable 'createdAt' _sort}}}</th>
+                        <th class="{{showColumn is_show_updated_at}}">Ngày cập nhật {{{sortable 'updatedAt' _sort}}}</th>
+                        <th style="width: 19%;">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,14 +132,14 @@
                         <td><input type="checkbox" name="noteIds[]" value="{{this._id}}" class="noteIds"></td>
                         <td scope="row">{{sum @index 1 }}</td>
                         <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
-                        <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
-                        <td>
+                        <td class="{{showColumn @root.is_show_desc}}"><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
+                        <td class="{{showColumn @root.is_show_bookmark}}">
                             <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
                                 data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
                             </i>
                         </td>
-                        <td>{{vnFullFormat this.createdAt}}</td>
-                        <td>{{vnFullFormat this.updatedAt}}</td>
+                        <td class="{{showColumn @root.is_show_created_at}}">{{vnFullFormat this.createdAt}}</td>
+                        <td class="{{showColumn @root.is_show_updated_at}}">{{vnFullFormat this.updatedAt}}</td>
                         <td>
                             <a href="/notes/{{this._id}}/edit" class="btn btn-warning btn-sm btn-edit">
                                 <i class="fa-solid fa-pen-to-square"></i> Sửa
@@ -152,7 +156,7 @@
                     </tr>
                     {{else}}
                     <tr>
-                        <td colspan="7" class="text-center">Không tìm thấy ghi chú. <a href="/notes/create">Thêm mới ghi
+                        <td colspan="8" class="text-center">Không tìm thấy ghi chú. <a href="/notes/create">Thêm mới ghi
                                 chú</a></td>
                     </tr>
                     {{/each}}
@@ -238,6 +242,49 @@
     </div>
 </div>
 
+{{!-- Modal show column --}}
+<div class="modal fade" id="modalShowColumn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Hiển thị cột</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/apps/{{app_id}}?_method=PUT" method="POST" name="form-show-column">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="is_show_desc" value="1" {{checkedColumn is_show_desc}}>
+                        <label class="form-check-label" for="inlineCheckbox1">Mô tả</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="is_show_bookmark" value="1" {{checkedColumn is_show_bookmark}}>
+                        <label class="form-check-label" for="inlineCheckbox2">Đánh dấu</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="is_show_created_at" value="1" {{checkedColumn is_show_created_at}}>
+                        <label class="form-check-label" for="inlineCheckbox3">Ngày tạo</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="is_show_updated_at" value="1" {{checkedColumn is_show_updated_at}}>
+                        <label class="form-check-label" for="inlineCheckbox4">Ngày cập nhật</label>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-update-app">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         let isChecked = false
@@ -245,6 +292,7 @@
         var formDelete = $(".form-delete")
         var formCopy = $(".form-copy")
         var formBookmark = $(".form-bookmark")
+        var formShowColumn = document.forms['form-show-column']
 
         var btnSearch = $(".btn-search")
         var btnDelete = $(".btn-delete")
@@ -253,12 +301,13 @@
         var btnCopyConfirm = $(".btn-copy-confirm")
         var btnBookmark = $(".btn-bookmark")
         var btnHandleFormAction = $(".btn-handle-form-actions")
+        var btnUpdateApp = $(".btn-update-app")
 
         var showSelectCountRecord = $("#select-show-count-record")
         var handleFormActions = document.forms['handle-form-actions']
         var checkAll = $(".check-all")
         var inputNoteIds = $("input[name='noteIds[]']")
-     
+
         var dataID = null;
 
         // Update title
@@ -357,5 +406,10 @@
                 btnHandleFormAction.attr('disabled', true);
             }
         }
+
+        // Click button update app
+        btnUpdateApp.click(function () {
+            formShowColumn.submit();
+        })
     })
 </script>

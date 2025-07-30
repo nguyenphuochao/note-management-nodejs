@@ -2,6 +2,7 @@ const NoteController = require('../controllers/NoteController')
 const LoginController = require('../controllers/LoginController')
 const RegisterController = require('../controllers/RegisterController')
 const ProfileController = require('../controllers/ProfileController')
+const AppController = require('../controllers/AppController')
 const authenticateUser = require('../middlewares/authenticateUser')
 
 
@@ -26,6 +27,7 @@ module.exports = function route(router) {
 
     // profile
     router.get('/profile', ProfileController.index)
+    router.put('/profile', ProfileController.update)
 
     // notes
     router.get('/notes', NoteController.index)
@@ -44,4 +46,7 @@ module.exports = function route(router) {
     router.patch('/notes/:id/bookmark', NoteController.bookmarkUpdate)
     router.patch('/notes/:id/bookmark/uncheck', NoteController.bookmarkUncheck)
     router.post('/notes/handle-form-actions', NoteController.handleFormActions)
+
+    // apps
+    router.put('/apps/:id', AppController.update)
 }

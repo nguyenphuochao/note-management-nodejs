@@ -11,9 +11,9 @@ class ProfileController {
         }
     }
 
-    // [POST] /profile/update
+    // [PUT] /profile/update
     update(req, res) {
-
+        res.json('Đang cập nhật tính năng này!')
     }
 
 }

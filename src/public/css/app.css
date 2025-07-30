@@ -7,6 +7,19 @@ header a.active {
     color: red !important;
 }
 
+.btn-purple {
+    background-color: blueviolet;
+    color: white;
+}
+
+.btn-purple:hover {
+    opacity: 0.8;
+}
+
+a.btn-purple:hover {
+    color: white;
+}
+
 .btn-edit,
 .btn-delete,
 .btn-copy,

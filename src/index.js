@@ -8,6 +8,8 @@ const app = express()
 
 const db = require('./config/connectDB')
 const route = require('./routes');
+const sortMiddleware = require('./middlewares/sortMiddleware');
+const App = require('./models/App');
 
 app.use(session({
     secret: 'your_secret_key', // A strong, unique secret for signing the session ID cookie
@@ -67,6 +69,32 @@ app.engine('handlebars', engine({
         },
         iconSearch: (isDisplay) => {
             return isDisplay ? 'fa-minus' : 'fa-plus'
+        },
+        sortable: (field, sort) => {
+            const sortType = field === sort.column ? sort.type : 'default';
+
+            const icons = {
+                default: 'fa-solid fa-sort',
+                asc: 'fa-solid fa-arrow-up',
+                desc: 'fa-solid fa-arrow-down'
+            };
+
+            const types = {
+                default: 'desc',
+                asc: 'desc',
+                desc: 'asc'
+            };
+
+            const icon = icons[sortType]
+            const type = types[sortType]
+
+            return `<a href="?_sort&column=${field}&type=${type}"><i class="${icon}"></i></a>`
+        },
+        showColumn: (isShow) => {
+            return isShow ? '' : 'd-none'
+        },
+        checkedColumn: (isShow) => {
+            return isShow ? 'checked' : ''
         }
     }
 }));
@@ -82,6 +110,8 @@ app.use(express.json()); // support JSON : ajax, fetch, axios, XMLHttpRequest
 
 // HTTP method override
 app.use(methodOverride('_method'));
+
+app.use(sortMiddleware);
 
 // use session global
 app.use(function (req, res, next) {

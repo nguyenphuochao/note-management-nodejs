@@ -1,3 +1,4 @@
+const App = require('../models/App');
 const Note = require('../models/Note')
 const { mutipleMongooseToObject, mongooseToObject } = require('../util/mongoose')
 
@@ -21,6 +22,13 @@ class NoteController {
         const s_createdAtTo = req.query.s_createdAtTo
         const s_updatedAtFrom = req.query.s_updatedAtFrom
         const s_updatedAtTo = req.query.s_updatedAtTo
+
+        // sort column
+        if (req.query.hasOwnProperty('_sort')) {
+            searchQuery.sort({
+                [req.query.column]: req.query.type
+            })
+        }
 
         // search name
         if (Object.hasOwn(req.query, 's_name') && s_name != '') {
@@ -78,9 +86,10 @@ class NoteController {
             Note.find(searchQuery).countDocuments({ userId: req.session.user.id }),
             searchQuery.skip(skipIndex).limit(limit).sort({ sort_num: 'asc' }),
             Note.countDocumentsWithDeleted({ userId: req.session.user.id, deleted: true }),
-            Note.countDocuments({ userId: req.session.user.id, bookmark: 1 })
+            Note.countDocuments({ userId: req.session.user.id, bookmark: 1 }),
+            App.findOne({ userId: req.session.user.id })
         ])
-            .then(([totalItems, notes, totalDeleted, totalBookmark]) =>
+            .then(([totalItems, notes, totalDeleted, totalBookmark, app]) =>
                 res.render('notes/index', {
                     notes: mutipleMongooseToObject(notes),
                     s_name,
@@ -95,7 +104,12 @@ class NoteController {
                     limit,
                     page,
                     totalDeleted,
-                    totalBookmark
+                    totalBookmark,
+                    app_id: app._id,
+                    is_show_desc: app.is_show_desc,
+                    is_show_bookmark: app.is_show_bookmark,
+                    is_show_created_at: app.is_show_created_at,
+                    is_show_updated_at: app.is_show_updated_at
                 })
             )
             .catch(next)
