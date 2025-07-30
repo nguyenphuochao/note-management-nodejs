@@ -39,3 +39,11 @@ a.btn-purple:hover {
     overflow: hidden;
     height: 50px;
 }
+
+@media screen and (max-width: 500px) {
+    .text-truncate-line-clamp-2 {
+        -webkit-line-clamp: 6;
+        height: auto;
+    }
+    
+}
