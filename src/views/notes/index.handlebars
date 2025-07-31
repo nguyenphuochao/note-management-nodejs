@@ -135,7 +135,7 @@
                         <td scope="row">{{sum @index 1 }}</td>
                         <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
                         <td class="{{showColumn @root.is_show_desc}}"><span
-                                class="text-truncate-line-clamp-2 text-description">{{this.description}}</span></td>
+                                class="text-truncate-line-clamp-2">{{this.description}}</span></td>
                         <td class="{{showColumn @root.is_show_bookmark}}">
                             <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
                                 data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
@@ -418,13 +418,5 @@
         btnUpdateApp.click(function () {
             formShowColumn.submit();
         })
-
-        // truncating the length of a string
-        const originalString = $(".text-description").text();
-        if(originalString.includes("http") || originalString.includes("https")){
-            const truncatedString = originalString.slice(0, 38);
-            $(".text-description").text(truncatedString + '...');
-        }
-        
     })
 </script>
