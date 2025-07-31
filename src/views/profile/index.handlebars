@@ -1,6 +1,6 @@
 <div class="mt-5">
     <h2>Thông tin tài khoản</h2>
-    <form action="/profile?_method=PUT" method="POST">
+    <form action="/profile?_method=PUT" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label for="fullname">Họ và tên</label>
             <input type="text" class="form-control" id="fullname" name="fullname" value="{{user.fullname}}" required>
@@ -20,7 +20,7 @@
 
         <div class="form-group">
             <label for="createdAt">Ngày đăng kí tài khoản</label>
-            <input type="text" class="form-control" id="createdAt" name="createdAt" value="{{user.createdAt}}" disabled>
+            <input type="text" class="form-control" id="createdAt" name="createdAt" value="{{vnFullFormat user.createdAt}}" disabled>
         </div>
 
         <div>

@@ -13,7 +13,25 @@ class ProfileController {
 
     // [PUT] /profile/update
     update(req, res) {
-        res.json('Đang cập nhật tính năng này!')
+        const dataUser = {
+            fullname: req.body.fullname,
+            avatar: req.body.avatar
+        }
+
+        User.updateOne({ _id: req.session.user.id }, dataUser)
+            .then(() => {
+                // use session alert
+                req.session.message = {
+                    type: 'success',
+                    title: 'Đã cập nhật thông tin tài khoản'
+                }
+
+                // set new fullname
+                req.session.user.fullname = req.body.fullname
+
+                res.redirect('/profile')
+            })
+            .catch(err => console.log(err))
     }
 
 }

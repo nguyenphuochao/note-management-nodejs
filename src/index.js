@@ -3,14 +3,13 @@ const path = require('path');
 const methodOverride = require('method-override');
 const { engine } = require('express-handlebars')
 const session = require('express-session');
-require('dotenv').config({path: __dirname + '/.env'}); // Load .env in your application
+require('dotenv').config({ path: __dirname + '/.env' }); // Load .env in your application
 
 const app = express()
 
 const db = require('./config/connectDB')
 const route = require('./routes');
 const sortMiddleware = require('./middlewares/sortMiddleware');
-const App = require('./models/App');
 
 app.use(session({
     secret: 'your_secret_key', // A strong, unique secret for signing the session ID cookie

@@ -5,6 +5,21 @@ const ProfileController = require('../controllers/ProfileController')
 const AppController = require('../controllers/AppController')
 const authenticateUser = require('../middlewares/authenticateUser')
 
+const multer = require('multer');
+
+// Cấu hình nơi lưu trữ file
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, 'public', 'uploads')); // lưu vào public/uploads
+    },
+    filename: function (req, file, cb) {
+        // Đặt tên file duy nhất bằng timestamp + original name
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+
 
 module.exports = function route(router) {
     // login
@@ -27,7 +42,7 @@ module.exports = function route(router) {
 
     // profile
     router.get('/profile', ProfileController.index)
-    router.put('/profile', ProfileController.update)
+    router.put('/profile', upload.single('file'), ProfileController.update)
 
     // notes
     router.get('/notes', NoteController.index)

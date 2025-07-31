@@ -25,26 +25,28 @@
                         <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
                         <td>{{vnFullFormat this.createdAt}}</td>
                         <td>{{vnFullFormat this.updatedAt}}</td>
-                        <td>
-                            <a href="#" class="btn btn-warning btn-sm btn-uncheck-bookmark" data-id="{{this._id}}">
+                        <td style="width: 20%;">
+                            <a href="/notes/{{this._id}}/edit" class="btn btn-warning btn-sm" data-id="{{this._id}}">
+                                <i class="fa-solid fa-pen-to-square"></i> Sửa
+                            </a>
+                            <a href="#" class="btn btn-success btn-sm btn-uncheck-bookmark" data-id="{{this._id}}">
                                 <i class="fa-solid fa-pen-to-square"></i> Bỏ đánh dấu
                             </a>
                         </td>
                     </tr>
                     {{else}}
                     <tr>
-                        <td colspan="6" class="text-center">Không tìm thấy đánh dấu. <a href="/notes">Danh sách ghi chú</a></td>
+                        <td colspan="6" class="text-center">Không tìm thấy đánh dấu. <a href="/notes">Danh sách ghi
+                                chú</a></td>
                     </tr>
                     {{/each}}
                 </tbody>
             </table>
 
-            <div class="total-items">
-                <p>Số lượng ghi chú: <b>{{totalNote}}</b></p>
-            </div>
+        </div>
 
-            {{!-- Pagination --}}
-
+        <div class="total-items">
+            <p>Số lượng ghi chú: <b>{{totalNote}}</b></p>
         </div>
 
     </div>
@@ -62,7 +64,7 @@
         document.title = "Quản lí ghi chú | Đánh dấu ghi chú";
 
         // click uncheck bookmark
-        btnUncheckBookmark.click(function(e) {
+        btnUncheckBookmark.click(function (e) {
             e.preventDefault();
             var id = $(this).data('id');
             formBookmark.action = '/notes/' + id + '/bookmark/uncheck?_method=PATCH';

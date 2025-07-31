@@ -35,7 +35,8 @@ class LoginController {
                 req.session.user = {
                     id: user._id,
                     email: user.email,
-                    fullname: user.fullname
+                    fullname: user.fullname,
+                    createdAt: user.createdAt
                 };
 
                 res.redirect('/')
