@@ -214,7 +214,7 @@ class NoteController {
 
     // [GET] /notes/trash
     trash(req, res) {
-        Note.findWithDeleted({ deleted: true })
+        Note.findWithDeleted({ deleted: true, userId: req.session.user.id })
             .then(notes => res.render('notes/trash', { notes: mutipleMongooseToObject(notes) }))
             .catch(err => console.log(err))
     }

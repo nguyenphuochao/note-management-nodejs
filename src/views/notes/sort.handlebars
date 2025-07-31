@@ -17,9 +17,13 @@
     <div class="mt-4">
 
         <form action="/notes/sort/update?_method=PATCH" method="POST">
+
             <div id="sortable">
                 {{#each notes}}
-                <div class="bg-info text-light pl-2 p-1 mb-2" data-id="{{this._id}}"><i class="fa-solid fa-sort"></i> {{this.name}}</div>
+                <div class="bg-info text-light pl-2 p-1 mb-2" data-id="{{this._id}}"><i class="fa-solid fa-sort"></i>
+                    {{this.name}}</div>
+                {{else}}
+                <div class="text-center">Không tìm thấy ghi chú! <a href="/notes/create">Thêm mới ghi chú</a></div>
                 {{/each}}
             </div>
 
@@ -28,6 +32,7 @@
                 <button class="btn btn-primary btn-sm">Cập nhật</button>
                 <a href="/notes" class="btn btn-warning btn-sm">Quay về</a>
             </div>
+            
         </form>
 
     </div>
@@ -40,9 +45,9 @@
         $("#sortable").sortable();
 
         // submit form
-        $("form").submit(function() {
+        $("form").submit(function () {
             var dataId = [];
-            $("#sortable div").each(function() {
+            $("#sortable div").each(function () {
                 var id = $(this).data("id");
                 dataId.push(id);
             })
