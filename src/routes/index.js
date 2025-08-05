@@ -64,4 +64,10 @@ module.exports = function route(router) {
 
     // apps
     router.put('/apps/:id', AppController.update)
+
+    // add router ping server
+    router.get('/ping', (req, res) => {
+        res.send('pong');
+    });
+
 }
