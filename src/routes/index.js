@@ -32,6 +32,11 @@ module.exports = function route(router) {
     router.post('/register', RegisterController.register)
     router.get('/check-email-exist', RegisterController.checkEmailExist)
 
+    // add router ping server
+    router.get('/ping', (req, res) => {
+        res.send('pong');
+    });
+
     // rediect default
     router.get('/', function (req, res) {
         res.redirect('/notes')
@@ -64,10 +69,4 @@ module.exports = function route(router) {
 
     // apps
     router.put('/apps/:id', AppController.update)
-
-    // add router ping server
-    router.get('/ping', (req, res) => {
-        res.send('pong');
-    });
-
 }
