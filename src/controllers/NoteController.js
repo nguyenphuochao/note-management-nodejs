@@ -89,7 +89,7 @@ class NoteController {
 
         Promise.all([
             Note.find(searchQuery).countDocuments({ userId: req.session.user.id }),
-            searchQuery.skip(skipIndex).limit(limit).sort({ sort_num: 'asc' }),
+            searchQuery.skip(skipIndex).limit(limit).sort({ sort_num: 'desc' }),
             Note.countDocumentsWithDeleted({ userId: req.session.user.id, deleted: true }),
             Note.countDocuments({ userId: req.session.user.id, bookmark: 1 }),
             App.findOne({ userId: req.session.user.id })
@@ -247,7 +247,7 @@ class NoteController {
 
     // [GET] /notes/sort
     sortList(req, res, next) {
-        Note.find({ userId: req.session.user.id }).sort({ sort_num: 'asc' })
+        Note.find({ userId: req.session.user.id }).sort({ sort_num: 'desc' })
             .then(notes => res.render('notes/sort', { notes: mutipleMongooseToObject(notes) }))
             .catch(next)
     }
