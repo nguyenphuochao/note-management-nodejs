@@ -23,6 +23,11 @@ class NoteController {
         const s_updatedAtFrom = req.query.s_updatedAtFrom
         const s_updatedAtTo = req.query.s_updatedAtTo
 
+        // validate page
+        if(req.query.page < 1) {
+            return res.redirect('/notes')
+        }
+
         // sort column
         if (req.query.hasOwnProperty('_sort')) {
             searchQuery.sort({

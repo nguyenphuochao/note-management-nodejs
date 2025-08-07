@@ -157,19 +157,30 @@
                             </a>
                         </td>
                     </tr>
+                    {{else if (checkInvalidShowData @root.page @root.totalPage)}}
+                    <tr>
+                        <td colspan="8" class="text-center">Dữ liệu hiển thị không hợp lệ. 
+                            <a href="/notes">Quay về danh sách</a>
+                        </td>
+                    </tr>
                     {{else}}
                     <tr>
-                        <td colspan="8" class="text-center">Không tìm thấy ghi chú. <a href="/notes/create">Thêm mới ghi
-                                chú</a></td>
+                        <td colspan="8" class="text-center">Không tìm thấy ghi chú. 
+                            <a href="/notes/create">Thêm mới ghi chú</a>
+                        </td>
                     </tr>
                     {{/each}}
                 </tbody>
             </table>
         </div>
 
+        {{#if notes}}
+
         <div class="total-items">
             <p>Số lượng ghi chú: <b>{{totalItems}}</b></p>
         </div>
+
+        {{/if}}
 
         {{!-- Pagination --}}
 

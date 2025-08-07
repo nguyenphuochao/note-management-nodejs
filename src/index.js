@@ -96,6 +96,9 @@ app.engine('handlebars', engine({
         },
         checkedColumn: (isShow) => {
             return isShow ? 'checked' : ''
+        },
+        checkInvalidShowData: (page, totalPage) => {
+            return page > totalPage ? true : false
         }
     }
 }));
