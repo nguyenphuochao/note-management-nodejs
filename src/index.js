@@ -89,7 +89,7 @@ app.engine('handlebars', engine({
             const icon = icons[sortType]
             const type = types[sortType]
 
-            return `<a href="?_sort&column=${field}&type=${type}"><i class="${icon}"></i></a>`
+            return `<a href="?_sort=1&column=${field}&type=${type}"><i class="${icon}"></i></a>`
         },
         showColumn: (isShow) => {
             return isShow ? '' : 'd-none'
