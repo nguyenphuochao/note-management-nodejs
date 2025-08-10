@@ -4,12 +4,14 @@ const methodOverride = require('method-override');
 const { engine } = require('express-handlebars')
 const session = require('express-session');
 require('dotenv').config({ path: __dirname + '/.env' }); // Load .env in your application
+const cron = require('node-cron');
 
 const app = express()
 
 const db = require('./config/connectDB')
 const route = require('./routes');
 const sortMiddleware = require('./middlewares/sortMiddleware');
+const Note = require('./models/Note');
 
 app.use(session({
     secret: 'your_secret_key', // A strong, unique secret for signing the session ID cookie
@@ -17,6 +19,21 @@ app.use(session({
     saveUninitialized: true, // Save new but uninitialized sessions
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // Set to true if using HTTPS in production
 }));
+
+// Define the cron schedule (e.g., runs every day at 2 AM)
+cron.schedule('0 2 * * *', () => {
+    console.log('Running data deletion cron job...');
+    // Call your deletion function here
+    deleteOldRecords();
+});
+
+function deleteOldRecords() {
+    // Your logic to delete old data/files goes here
+    // Example: Delete MongoDB documents older than 7 days
+    Note.deleteMany({ deletedAt: { $lt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } })
+        .then(() => console.log("Xóa ghi chú"))
+        .catch(err => console.log(err))
+}
 
 // view engine handlebars
 app.engine('handlebars', engine({
