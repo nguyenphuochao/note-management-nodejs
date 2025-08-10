@@ -140,6 +140,9 @@
                             <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
                                 data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
                             </i>
+                            <div style="width: 1rem;height: 1rem;" class="spinner-border d-none spinner-border-{{this._id}}" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
                         </td>
                         <td class="{{showColumn @root.is_show_created_at}}">{{vnFullFormat this.createdAt}}</td>
                         <td class="{{showColumn @root.is_show_updated_at}}">{{vnFullFormat this.updatedAt}}</td>
@@ -376,13 +379,22 @@
             dataID = $(this).data("id")
             var bookmarkId = $(this).attr("data-bookmark");
 
+            // hidden fa bookmark
+            $(`.fa-bookmark-${dataID}`).hide()
+            // show spinner border
+            $(`.spinner-border-${dataID}`).removeClass("d-none")
+
             $.ajax({
                 url: `/notes/${dataID}/bookmark?_method=PATCH`,
                 type: 'POST',
                 data: { bookmark: bookmarkId }
             })
                 .done(function (data) {
-                    console.log("data: ", data);
+                    // show fa bookmark
+                    $(`.fa-bookmark-${dataID}`).show()
+                    // hide spinner border
+                    $(`.spinner-border-${dataID}`).addClass("d-none")
+                    // toggle class
                     $(`.fa-bookmark-${dataID}`).toggleClass('fa-solid fa-regular')
                     // update data-bookmark in html
                     $(`.fa-bookmark-${dataID}`).attr('data-bookmark', data.bookmark)
