@@ -21,6 +21,9 @@
         </div>
 
         <div>
+            <form action="/notes/export-csv" style="display: inline;" method="POST">
+                <button class="btn btn-success btn-sm font-weight-bold"><i class="fa-solid fa-file-export"></i> Xuất CSV</button>
+            </form>
             <a href="/notes/trash" class="btn btn-danger btn-sm font-weight-bold">
                 <i class="fa-solid fa-trash"></i> Thùng rác <span>({{totalDeleted}})</span>
             </a>
