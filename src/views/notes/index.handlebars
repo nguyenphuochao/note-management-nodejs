@@ -14,13 +14,27 @@
             <a href="/notes/bookmark" class="btn btn-warning btn-sm font-weight-bold">
                 <i class="fa-solid fa-bookmark"></i> Đánh dấu <span class="total-bookmark">({{totalBookmark}})</span>
             </a>
-            <a href="#" class="btn btn-purple btn-sm font-weight-bold" data-toggle="modal"
-                data-target="#modalShowColumn">
-                Hiển thị cột
+            <a href="#" class="btn btn-purple btn-sm font-weight-bold" data-toggle="modal" data-target="#modalShowColumn">
+                <i class="fa-solid fa-eye"></i> Hiển thị cột
             </a>
         </div>
 
         <div>
+            <div style="display: inline;">
+                <button type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: #15617B;"
+                    class="btn btn-success btn-sm btn-export-csv font-weight-bold dropdown-toggle">
+                    <i class="fa-solid fa-file-export"></i> Xuất CSV
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <form action="/notes/export-csv" method="POST">
+                        <button type="submit" class="dropdown-item btn-export-all">Tất cả</button>
+                    </form>
+                    <form action="/notes/export-csv" method="POST">
+                        <button type="submit" class="dropdown-item btn-export-checked" disabled>Mục đã chọn</button>
+                        <input type="hidden" name="noteIdsCsv">
+                    </form>
+                </div>
+            </div>
             <a href="/notes/trash" class="btn btn-danger btn-sm font-weight-bold">
                 <i class="fa-solid fa-trash"></i> Thùng rác <span>({{totalDeleted}})</span>
             </a>
@@ -97,21 +111,26 @@
         </div>
 
         {{!-- show count record with select --}}
-        <div class="mt-4">
-            <label for="select-show-count-record">Hiển thị số lượng : </label>
-            <select name="select-show-count-record" id="select-show-count-record">
-                <option value="10" {{selected 10 limit}}>10</option>
-                <option value="30" {{selected 30 limit}}>30</option>
-                <option value="50" {{selected 50 limit}}>50</option>
-                <option value="100" {{selected 100 limit}}>100</option>
-                <option value="150" {{selected 150 limit}}>150</option>
-                <option value="250" {{selected 250 limit}}>250</option>
-                <option value="500" {{selected 500 limit}}>500</option>
-                <option value="1000" {{selected 1000 limit}}>1000</option>
-            </select>
+        <div class="mt-4 d-flex">
+            <div>
+                <label for="select-show-count-record">Hiển thị số lượng : </label>
+                <select name="select-show-count-record" id="select-show-count-record">
+                    <option value="10" {{selected 10 limit}}>10</option>
+                    <option value="30" {{selected 30 limit}}>30</option>
+                    <option value="50" {{selected 50 limit}}>50</option>
+                    <option value="100" {{selected 100 limit}}>100</option>
+                    <option value="150" {{selected 150 limit}}>150</option>
+                    <option value="250" {{selected 250 limit}}>250</option>
+                    <option value="500" {{selected 500 limit}}>500</option>
+                    <option value="1000" {{selected 1000 limit}}>1000</option>
+                </select>
+            </div>
+            <div class="ml-5 d-none count-checked-record">
+                Số lượng chọn : <span class="font-weight-bold">0</span>
+            </div>
         </div>
 
-        {{!-- table --}}
+        {{!-- table list notes --}}
         <div class="mt-2 table-responsive">
             <table class="table table-hover table-striped">
                 <thead>
@@ -140,7 +159,8 @@
                             <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
                                 data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
                             </i>
-                            <div style="width: 1rem;height: 1rem;" class="spinner-border d-none spinner-border-{{this._id}}" role="status">
+                            <div style="width: 1rem;height: 1rem;"
+                                class="spinner-border d-none spinner-border-{{this._id}}" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </td>
@@ -162,13 +182,13 @@
                     </tr>
                     {{else if (checkInvalidShowData @root.page @root.totalPage)}}
                     <tr>
-                        <td colspan="8" class="text-center">Dữ liệu hiển thị không hợp lệ. 
+                        <td colspan="8" class="text-center">Dữ liệu hiển thị không hợp lệ.
                             <a href="/notes">Quay về danh sách</a>
                         </td>
                     </tr>
                     {{else}}
                     <tr>
-                        <td colspan="8" class="text-center">Không tìm thấy ghi chú. 
+                        <td colspan="8" class="text-center">Không tìm thấy ghi chú.
                             <a href="/notes/create">Thêm mới ghi chú</a>
                         </td>
                     </tr>
@@ -414,6 +434,8 @@
                 inputNoteIds.prop('checked', false)
             }
             renderCheckAllSubmitBtn()
+
+            $("input[name='noteIdsCsv']").val(getValueIds())
         })
 
         // Note item checkbox change
@@ -424,17 +446,33 @@
                 checkAll.prop('checked', false)
             }
             renderCheckAllSubmitBtn()
+
+            $("input[name='noteIdsCsv']").val(getValueIds())
         })
 
-        //  Re-render check all submit button
+        //  Re-rendercheck all submit button
         function renderCheckAllSubmitBtn() {
             var checkedCount = $('input[name="noteIds[]"]:checked').length;
 
             if (checkedCount > 0) {
                 btnHandleFormAction.attr('disabled', false);
+                $(".count-checked-record").removeClass("d-none")
+                $(".count-checked-record span").text(checkedCount)
+                $(".btn-export-checked").attr('disabled', false)
             } else {
                 btnHandleFormAction.attr('disabled', true);
+                $(".count-checked-record").addClass("d-none")
+                $(".btn-export-checked").attr('disabled', true)
             }
+        }
+
+        // Get value ids notes
+        function getValueIds() {
+            var noteIds = []
+            $('input[name="noteIds[]"]:checked').each(function () {
+                noteIds.push($(this).val())
+            })
+            return noteIds
         }
 
         // Click button update app

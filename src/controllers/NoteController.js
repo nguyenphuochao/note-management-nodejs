@@ -1,3 +1,4 @@
+const { Parser } = require('json2csv');
 const App = require('../models/App');
 const Note = require('../models/Note')
 const { mutipleMongooseToObject, mongooseToObject } = require('../util/mongoose')
@@ -24,7 +25,7 @@ class NoteController {
         const s_updatedAtTo = req.query.s_updatedAtTo
 
         // validate page
-        if(req.query.page < 1) {
+        if (req.query.page < 1) {
             return res.redirect('/notes')
         }
 
@@ -387,6 +388,43 @@ class NoteController {
             default:
                 res.json({ message: 'Action is invalid' })
         }
+    }
+
+    // [POST] /notes/export-csv
+    exportCSV(req, res) {
+        let query = ''
+        if (req.body.noteIdsCsv) {
+            query = { userId: req.session.user.id, _id: { $in: req.body.noteIdsCsv.split(",") } }
+        } else {
+            query = { userId: req.session.user.id }
+        }
+
+        Note.find(query)
+            .then(notes => {
+
+                const data = [];
+
+                mutipleMongooseToObject(notes).forEach(note => {
+                    data.push({
+                        "Tên ghi chú": note.name,
+                        "Mô tả": note.description,
+                        "Đánh dấu": note.bookmark,
+                        "Ngày tạo": note.createdAt,
+                        "Ngày cập nhật": note.updatedAt
+                    });
+                });
+
+                const fields = ['Tên ghi chú', 'Mô tả', 'Đánh dấu', 'Ngày tạo', 'Ngày cập nhật']; // Define the fields (columns) for your CSV
+                const json2csvParser = new Parser({ fields });
+                let csv = json2csvParser.parse(data);
+
+                csv = '\uFEFF' + csv;
+
+                res.setHeader('Content-Disposition', 'attachment; filename="notes.csv"');
+                res.setHeader('Content-Type', 'text/csv', 'charset=utf-8');
+                res.status(200).end(csv);
+            })
+            .catch(err => console.log(err))
     }
 }
 
