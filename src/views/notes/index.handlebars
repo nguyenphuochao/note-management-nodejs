@@ -14,14 +14,16 @@
             <a href="/notes/bookmark" class="btn btn-warning btn-sm font-weight-bold">
                 <i class="fa-solid fa-bookmark"></i> Đánh dấu <span class="total-bookmark">({{totalBookmark}})</span>
             </a>
-            <a href="#" class="btn btn-purple btn-sm font-weight-bold" data-toggle="modal" data-target="#modalShowColumn">
+            <a href="#" class="btn btn-purple btn-sm font-weight-bold" data-toggle="modal"
+                data-target="#modalShowColumn">
                 <i class="fa-solid fa-eye"></i> Hiển thị cột
             </a>
         </div>
 
         <div>
             <div style="display: inline;">
-                <button type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: #15617B;"
+                <button type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" style="background: #15617B;"
                     class="btn btn-success btn-sm btn-export-csv font-weight-bold dropdown-toggle">
                     <i class="fa-solid fa-file-export"></i> Xuất CSV
                 </button>
@@ -326,6 +328,21 @@
     </div>
 </div>
 
+<!-- Modal show full content-->
+<div class="modal fade" id="modalShowContent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button style="text-align: right;margin-right: 10px;" type="button" class="close" data-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <textarea class="form-control" style="border: 0;"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         let isChecked = false
@@ -478,6 +495,24 @@
         // Click button update app
         btnUpdateApp.click(function () {
             formShowColumn.submit();
+        })
+
+        // Click column show name modal
+        $("tbody tr td:nth-child(3) span").click(function () {
+            $("#modalShowContent").modal("show");
+
+            var content = $(this).text();
+            $("#modalShowContent .modal-body textarea").html(content);
+            $("#modalShowContent .modal-body textarea").attr("rows", 2);
+        })
+
+        // Click column show desciption modal
+        $("tbody tr td:nth-child(4) span").click(function () {
+            $("#modalShowContent").modal("show");
+
+            var content = $(this).text();
+            $("#modalShowContent .modal-body textarea").html(content);
+            $("#modalShowContent .modal-body textarea").attr("rows", 20);
         })
     })
 </script>
