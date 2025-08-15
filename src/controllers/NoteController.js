@@ -392,7 +392,14 @@ class NoteController {
 
     // [POST] /notes/export-csv
     exportCSV(req, res) {
-        Note.find({ userId: req.session.user.id })
+        let query = ''
+        if (req.body.noteIdsCsv) {
+            query = { userId: req.session.user.id, _id: { $in: req.body.noteIdsCsv.split(",") } }
+        } else {
+            query = { userId: req.session.user.id }
+        }
+
+        Note.find(query)
             .then(notes => {
 
                 const data = [];

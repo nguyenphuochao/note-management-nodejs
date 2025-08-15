@@ -41,6 +41,11 @@ a.btn-purple:hover {
     height: 50px;
 }
 
+.btn-export-csv:hover {
+    opacity: 0.8;
+    background-color: red;
+}
+
 @media screen and (max-width: 500px) {
     .text-truncate-line-clamp-2 {
         -webkit-line-clamp: 6;
