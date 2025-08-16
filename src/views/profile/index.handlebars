@@ -10,7 +10,7 @@
             <label for="avatar">Avatar</label>
             <input type="file" class="form-control" id="avatar" name="avatar" value="">
             <img height="200" alt="Image preview...">
-            <button type="button" class="btn-delete-avatar">X</button>
+            <button type="button" class="btn-delete-avatar" style="display: none;">X</button>
         </div>
 
         <div class="form-group">
@@ -24,8 +24,8 @@
         </div>
 
         <div>
-            <button class="btn btn-primary">Cập nhật</button>
-            <a href="/" class="btn btn-warning">Quay về</a>
+            <button class="btn btn-primary btn-sm">Cập nhật</button>
+            <a href="/" class="btn btn-warning btn-sm">Quay về</a>
         </div>
     </form>
 </div>
@@ -39,8 +39,6 @@
 
         // Update title
         document.title = "Quản lí ghi chú | Thông tin tài khoản"
-
-        btnDeleteAvatar.hide(); // set default hide preview avatar
 
         // Set preview avatar
         avatarInput.change(function (e) {
