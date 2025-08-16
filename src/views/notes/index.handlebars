@@ -87,10 +87,15 @@
             </div>
         </div>
 
-        <button class="btn btn-success btn-sm mt-2">
+        <button class="btn btn-success btn-sm mt-4">
             <i class="fa-solid fa-magnifying-glass"></i>
             Tìm kiếm
         </button>
+
+        <a href="/notes" class="btn btn-danger btn-sm mt-4">
+            <i class="fa-solid fa-xmark"></i>
+            Đặt lại
+        </a>
 
     </form>
 
@@ -214,7 +219,10 @@
         <nav>
             <ul class="pagination">
                 <li class="page-item {{prevPage page}}">
-                    <a class="page-link" href="?page={{subtract page 1}}" tabindex="-1">Previous</a>
+                    <a class="page-link" href="?page={{subtract page 1}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
                 </li>
 
                 {{#each (pagination totalPage)}}
@@ -224,7 +232,10 @@
                 {{/each}}
 
                 <li class="page-item {{nextPage page totalPage}}">
-                    <a class="page-link" href="?page={{sum page 1}}">Next</a>
+                    <a class="page-link" href="?page={{sum page 1}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </li>
             </ul>
         </nav>
@@ -321,7 +332,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-primary btn-update-app">Lưu</button>
             </div>
         </div>
