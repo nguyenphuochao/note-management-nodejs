@@ -9,8 +9,14 @@
         <div class="form-group">
             <label for="avatar">Avatar</label>
             <input type="file" class="form-control" id="avatar" name="avatar" value="">
-            <img height="200" alt="Image preview...">
-            <button type="button" class="btn-delete-avatar" style="display: none;">X</button>
+            {{#if (checkHasAvatar user.avatar)}}
+            <img class="preview-avatar" src="/uploads/{{user.avatar}}" height="200" alt="{{user.avatar}}">
+            <button type="button" class="btn-delete-avatar" style="display: inline-block">X</button>
+            {{else}}
+            <img class="preview-avatar" height="200" alt="Avatar Preview...">
+            <button type="button" class="btn-delete-avatar" style="display: none">X</button>
+            {{/if}}
+
         </div>
 
         <div class="form-group">
@@ -20,7 +26,8 @@
 
         <div class="form-group">
             <label for="createdAt">Ngày đăng kí tài khoản</label>
-            <input type="text" class="form-control" id="createdAt" name="createdAt" value="{{vnFullFormat user.createdAt}}" disabled>
+            <input type="text" class="form-control" id="createdAt" name="createdAt"
+                value="{{vnFullFormat user.createdAt}}" disabled>
         </div>
 
         <div>
@@ -34,8 +41,11 @@
     // Loaded DOM
     document.addEventListener("DOMContentLoaded", (event) => {
         var avatarInput = $("#avatar")
-        var previewAvatar = document.querySelector('img');
+        var previewAvatar = document.querySelector(".preview-avatar");
         var btnDeleteAvatar = $(".btn-delete-avatar")
+
+        console.log(previewAvatar)
+        console.log(btnDeleteAvatar)
 
         // Update title
         document.title = "Quản lí ghi chú | Thông tin tài khoản"
@@ -46,15 +56,13 @@
             var file = e.target.files[0];
             let url = window.URL.createObjectURL(file);
             previewAvatar.src = url // update src image
-
-            // reset value
-            e.target.value = null
         })
 
         // Click button [X] delete avatar
         btnDeleteAvatar.click(function (e) {
             btnDeleteAvatar.hide();
             previewAvatar.src = ""
+            previewAvatar.alt = ""
         })
     })
 </script>

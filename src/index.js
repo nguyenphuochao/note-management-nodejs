@@ -1,10 +1,11 @@
+require('dotenv').config({ path: __dirname + '/.env' }); // Load .env in your application
 const express = require('express')
 const path = require('path');
 const methodOverride = require('method-override');
 const { engine } = require('express-handlebars')
 const session = require('express-session');
-require('dotenv').config({ path: __dirname + '/.env' }); // Load .env in your application
 const cron = require('node-cron');
+const fileUpload = require('express-fileupload');
 
 const app = express()
 
@@ -116,6 +117,9 @@ app.engine('handlebars', engine({
         },
         checkInvalidShowData: (page, totalPage) => {
             return page > totalPage && page > 1 ? true : false
+        },
+        checkHasAvatar: (avatar) => {
+            return avatar
         }
     }
 }));
@@ -133,6 +137,9 @@ app.use(express.json()); // support JSON : ajax, fetch, axios, XMLHttpRequest
 app.use(methodOverride('_method'));
 
 app.use(sortMiddleware);
+
+// Use the express-fileupload middleware
+app.use(fileUpload());
 
 // use session global
 app.use(function (req, res, next) {

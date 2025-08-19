@@ -36,6 +36,7 @@ class LoginController {
                     id: user._id,
                     email: user.email,
                     fullname: user.fullname,
+                    avatar: user.avatar,
                     createdAt: user.createdAt
                 };
 
