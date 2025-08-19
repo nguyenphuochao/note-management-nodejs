@@ -2,7 +2,7 @@
 
     <h2>Danh sách ghi chú</h2>
 
-    {{!-- action button --}}
+    {{!-- actions button --}}
     <div class="d-flex justify-content-between">
         <div>
             <a href="/notes/create" class="btn btn-primary btn-sm font-weight-bold">
@@ -12,7 +12,7 @@
                 <i class="fa-solid fa-sort"></i> Sắp xếp
             </a>
             <a href="/notes/bookmark" class="btn btn-warning btn-sm font-weight-bold">
-                <i class="fa-solid fa-bookmark"></i> Đánh dấu <span class="total-bookmark">({{totalBookmark}})</span>
+                <i class="fa-solid fa-bookmark"></i> Đánh dấu <span class="total-bookmark">({{totalBookmarkItems}})</span>
             </a>
             <a href="#" class="btn btn-purple btn-sm font-weight-bold" data-toggle="modal"
                 data-target="#modalShowColumn">
@@ -38,28 +38,28 @@
                 </div>
             </div>
             <a href="/notes/trash" class="btn btn-danger btn-sm font-weight-bold">
-                <i class="fa-solid fa-trash"></i> Thùng rác <span>({{totalDeleted}})</span>
+                <i class="fa-solid fa-trash"></i> Thùng rác <span>({{totalDeletedItems}})</span>
             </a>
         </div>
     </div>
 
     <button class="btn btn-success btn-sm mt-2 btn-search font-weight-bold">
-        <i class="fa-solid {{{iconSearch is_dislay_search}}}"></i> Tìm kiếm
+        <i class="fa-solid {{{iconSearch isDisplaySearch}}}"></i> Tìm kiếm
     </button>
 
     {{!-- form mutil search --}}
-    <form class="form-search" style="display: {{displaySearch is_dislay_search}}">
+    <form class="form-search" style="display: {{displaySearch isDisplaySearch}}">
         <div class="row mt-3">
             <div class="col-md-4">
                 <label for="name">Tên ghi chú</label>
                 <input type="text" class="form-control" placeholder="Tìm kiếm theo tên" name="s_name" id="name"
-                    value="{{s_name}}">
+                    value="{{sName}}">
             </div>
 
             <div class="col-md-4">
                 <label for="s_desc">Mô tả</label>
                 <input type="text" class="form-control" placeholder="Tìm kiếm theo mô tả" name="s_desc" id="s_desc"
-                    value="{{s_desc}}">
+                    value="{{sDesc}}">
             </div>
         </div>
 
@@ -68,10 +68,10 @@
                 <label for="createdAtFrom">Ngày tạo</label>
                 <div class="d-flex">
                     <input type="date" class="form-control flex-grow-1" placeholder="Tìm kiếm theo mô tả"
-                        name="s_createdAtFrom" id="createdAtFrom" value="{{s_createdAtFrom}}">
+                        name="s_createdAtFrom" id="createdAtFrom" value="{{sCreatedAtFrom}}">
                     <span class="mx-2">~</span>
                     <input type="date" class="form-control flex-grow-1" placeholder="Tìm kiếm theo mô tả"
-                        name="s_createdAtTo" id="createdAtTo" value="{{s_createdAtTo}}">
+                        name="s_createdAtTo" id="createdAtTo" value="{{sCreatedAtTo}}">
                 </div>
             </div>
 
@@ -79,10 +79,10 @@
                 <label for="updatedAtFrom">Ngày cập nhật</label>
                 <div class="d-flex">
                     <input type="date" class="form-control flex-grow-1" placeholder="Tìm kiếm theo mô tả"
-                        name="s_updatedAtFrom" id="updatedAtFrom" value="{{s_updatedAtFrom}}">
+                        name="s_updatedAtFrom" id="updatedAtFrom" value="{{sUpdatedAtFrom}}">
                     <span class="mx-2">~</span>
                     <input type="date" class="form-control flex-grow-1" placeholder="Tìm kiếm theo mô tả"
-                        name="s_updatedAtTo" id="updatedAtTo" value="{{s_updatedAtTo}}">
+                        name="s_updatedAtTo" id="updatedAtTo" value="{{sUpdatedAtTo}}">
                 </div>
             </div>
         </div>
@@ -145,11 +145,11 @@
                         <th></th>
                         <th>#</th>
                         <th style="width: 20%;">Tên ghi chú {{{sortable 'name' _sort}}}</th>
-                        <th class="{{showColumn is_show_desc}}" style="width: 20%;">Mô tả {{{sortable 'description'
+                        <th class="{{showColumn isShowDesc}}" style="width: 20%;">Mô tả {{{sortable 'description'
                             _sort}}}</th>
-                        <th class="{{showColumn is_show_bookmark}}">Đánh dấu {{{sortable 'bookmark' _sort}}}</th>
-                        <th class="{{showColumn is_show_created_at}}">Ngày tạo {{{sortable 'createdAt' _sort}}}</th>
-                        <th class="{{showColumn is_show_updated_at}}">Ngày cập nhật {{{sortable 'updatedAt' _sort}}}
+                        <th class="{{showColumn isShowBookmark}}">Đánh dấu {{{sortable 'bookmark' _sort}}}</th>
+                        <th class="{{showColumn isShowCreatedAt}}">Ngày tạo {{{sortable 'createdAt' _sort}}}</th>
+                        <th class="{{showColumn isShowUpdatedAt}}">Ngày cập nhật {{{sortable 'updatedAt' _sort}}}
                         </th>
                         <th style="width: 19%;">Thao tác</th>
                     </tr>
@@ -160,9 +160,9 @@
                         <td><input type="checkbox" name="noteIds[]" value="{{this._id}}" class="noteIds"></td>
                         <td scope="row">{{sum @index 1 }}</td>
                         <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
-                        <td class="{{showColumn @root.is_show_desc}}"><span
+                        <td class="{{showColumn @root.isShowDesc}}"><span
                                 class="text-truncate-line-clamp-2">{{this.description}}</span></td>
-                        <td class="{{showColumn @root.is_show_bookmark}}">
+                        <td class="{{showColumn @root.isShowBookmark}}">
                             <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
                                 data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
                             </i>
@@ -171,8 +171,8 @@
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </td>
-                        <td class="{{showColumn @root.is_show_created_at}}">{{vnFullFormat this.createdAt}}</td>
-                        <td class="{{showColumn @root.is_show_updated_at}}">{{vnFullFormat this.updatedAt}}</td>
+                        <td class="{{showColumn @root.isShowCreatedAt}}">{{vnFullFormat this.createdAt}}</td>
+                        <td class="{{showColumn @root.isShowUpdatedAt}}">{{vnFullFormat this.updatedAt}}</td>
                         <td>
                             <a href="/notes/{{this._id}}/edit" class="btn btn-warning btn-sm btn-edit">
                                 <i class="fa-solid fa-pen-to-square"></i> Sửa
@@ -225,13 +225,13 @@
                     </a>
                 </li>
 
-                {{#each (pagination totalPage)}}
+                {{#each (pagination totalPages)}}
                 <li class="page-item {{active this @root.page}}"><a class="page-link page-item-link"
                         href="?page={{this}}">{{this}}</a>
                 </li>
                 {{/each}}
 
-                <li class="page-item {{nextPage page totalPage}}">
+                <li class="page-item {{nextPage page totalPages}}">
                     <a class="page-link" href="?page={{sum page 1}}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
@@ -282,7 +282,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                Bạn chắc sẽ tạo 1 bản sao từ ghi chú này chứ?
+                Bạn chắc tạo 1 bản sao từ ghi chú này chứ?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -304,28 +304,28 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/apps/{{app_id}}?_method=PUT" method="POST" name="form-show-column">
+                <form action="/apps/{{appId}}?_method=PUT" method="POST" name="form-show-column">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="is_show_desc"
-                            value="1" {{checkedColumn is_show_desc}}>
+                            value="1" {{checkedColumn isShowDesc}}>
                         <label class="form-check-label" for="inlineCheckbox1">Mô tả</label>
                     </div>
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="is_show_bookmark"
-                            value="1" {{checkedColumn is_show_bookmark}}>
+                            value="1" {{checkedColumn isShowBookmark}}>
                         <label class="form-check-label" for="inlineCheckbox2">Đánh dấu</label>
                     </div>
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="is_show_created_at"
-                            value="1" {{checkedColumn is_show_created_at}}>
+                            value="1" {{checkedColumn isShowCreatedAt}}>
                         <label class="form-check-label" for="inlineCheckbox3">Ngày tạo</label>
                     </div>
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="is_show_updated_at"
-                            value="1" {{checkedColumn is_show_updated_at}}>
+                            value="1" {{checkedColumn isShowUpdatedAt}}>
                         <label class="form-check-label" for="inlineCheckbox4">Ngày cập nhật</label>
                     </div>
                 </form>

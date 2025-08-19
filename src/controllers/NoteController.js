@@ -7,7 +7,7 @@ class NoteController {
     // [GET] /note/index
     index(req, res, next) {
         // show form search
-        let is_dislay_search = false
+        let isDisplaySearch = false
 
         // pagination
         const page = parseInt(req.query.page) || 1 // current page
@@ -17,12 +17,12 @@ class NoteController {
         let searchQuery = Note.find({ userId: req.session.user.id }) // query data model
 
         // search query
-        const s_name = req.query.s_name
-        const s_desc = req.query.s_desc
-        const s_createdAtFrom = req.query.s_createdAtFrom
-        const s_createdAtTo = req.query.s_createdAtTo
-        const s_updatedAtFrom = req.query.s_updatedAtFrom
-        const s_updatedAtTo = req.query.s_updatedAtTo
+        const sName = req.query.s_name
+        const sDesc = req.query.s_desc
+        const sCreatedAtFrom = req.query.s_createdAtFrom
+        const sCreatedAtTo = req.query.s_createdAtTo
+        const sUpdatedAtFrom = req.query.s_updatedAtFrom
+        const sUpdatedAtTo = req.query.s_updatedAtTo
 
         // validate page
         if (req.query.page < 1) {
@@ -37,52 +37,52 @@ class NoteController {
         }
 
         // search name
-        if (Object.hasOwn(req.query, 's_name') && s_name != '') {
-            is_dislay_search = true
+        if (Object.hasOwn(req.query, 's_name') && sName != '') {
+            isDisplaySearch = true
             searchQuery = searchQuery.find({
-                name: new RegExp(s_name, "i")
+                name: new RegExp(sName, "i")
             })
         }
 
         // search description
-        if (Object.hasOwn(req.query, 's_desc') && s_desc != '') {
-            is_dislay_search = true
+        if (Object.hasOwn(req.query, 's_desc') && sDesc != '') {
+            isDisplaySearch = true
             searchQuery = searchQuery.find({
-                description: new RegExp(s_desc, "i")
+                description: new RegExp(sDesc, "i")
             })
         }
 
         // search createdAt from
-        if (Object.hasOwn(req.query, 's_createdAtFrom') && s_createdAtFrom != '') {
-            is_dislay_search = true
-            const createdAtFrom = new Date(s_createdAtFrom + 'T00:00:00.000Z').toISOString()
+        if (Object.hasOwn(req.query, 's_createdAtFrom') && sCreatedAtFrom != '') {
+            isDisplaySearch = true
+            const createdAtFrom = new Date(sCreatedAtFrom + 'T00:00:00.000Z').toISOString()
             searchQuery = searchQuery.find({
                 createdAt: { $gte: createdAtFrom }
             })
         }
 
         // search createdAt to
-        if (Object.hasOwn(req.query, 's_createdAtTo') && s_createdAtTo != '') {
-            is_dislay_search = true
-            const createdAtTo = new Date(s_createdAtTo + 'T23:59:59.000Z').toISOString()
+        if (Object.hasOwn(req.query, 's_createdAtTo') && sCreatedAtTo != '') {
+            isDisplaySearch = true
+            const createdAtTo = new Date(sCreatedAtTo + 'T23:59:59.000Z').toISOString()
             searchQuery = searchQuery.find({
                 createdAt: { $lte: createdAtTo }
             })
         }
 
         // search updatedAt from
-        if (Object.hasOwn(req.query, 's_updatedAtFrom') && s_updatedAtFrom != '') {
-            is_dislay_search = true
-            const updateAtFrom = new Date(s_updatedAtFrom + 'T00:00:00.000Z').toISOString()
+        if (Object.hasOwn(req.query, 's_updatedAtFrom') && sUpdatedAtFrom != '') {
+            isDisplaySearch = true
+            const updateAtFrom = new Date(sUpdatedAtFrom + 'T00:00:00.000Z').toISOString()
             searchQuery = searchQuery.find({
                 updatedAt: { $gte: updateAtFrom }
             })
         }
 
         // search updatedAt to
-        if (Object.hasOwn(req.query, 's_updatedAtTo') && s_updatedAtTo != '') {
-            is_dislay_search = true
-            const updatedAtTo = new Date(s_updatedAtTo + 'T23:59:59.000Z').toISOString()
+        if (Object.hasOwn(req.query, 's_updatedAtTo') && sUpdatedAtTo != '') {
+            isDisplaySearch = true
+            const updatedAtTo = new Date(sUpdatedAtTo + 'T23:59:59.000Z').toISOString()
             searchQuery = searchQuery.find({
                 updatedAt: { $lte: updatedAtTo }
             })
@@ -95,27 +95,27 @@ class NoteController {
             Note.countDocuments({ userId: req.session.user.id, bookmark: 1 }),
             App.findOne({ userId: req.session.user.id })
         ])
-            .then(([totalItems, notes, totalDeleted, totalBookmark, app]) =>
+            .then(([totalItems, notes, totalDeletedItems, totalBookmarkItems, app]) =>
                 res.render('notes/index', {
                     notes: mutipleMongooseToObject(notes),
-                    s_name,
-                    s_desc,
-                    is_dislay_search,
-                    s_createdAtFrom,
-                    s_createdAtTo,
-                    s_updatedAtFrom,
-                    s_updatedAtTo,
+                    sName,
+                    sDesc,
+                    isDisplaySearch,
+                    sCreatedAtFrom,
+                    sCreatedAtTo,
+                    sUpdatedAtFrom,
+                    sUpdatedAtTo,
                     totalItems,
-                    totalPage: Math.ceil(totalItems / limit),
+                    totalPages: Math.ceil(totalItems / limit),
                     limit,
                     page,
-                    totalDeleted,
-                    totalBookmark,
-                    app_id: app._id,
-                    is_show_desc: app.is_show_desc,
-                    is_show_bookmark: app.is_show_bookmark,
-                    is_show_created_at: app.is_show_created_at,
-                    is_show_updated_at: app.is_show_updated_at
+                    totalDeletedItems,
+                    totalBookmarkItems,
+                    appId: app._id,
+                    isShowDesc: app.is_show_desc,
+                    isShowBookmark: app.is_show_bookmark,
+                    isShowCreatedAt: app.is_show_created_at,
+                    isShowUpdatedAt: app.is_show_updated_at
                 })
             )
             .catch(next)
@@ -128,13 +128,13 @@ class NoteController {
 
     // [POST] /note/store
     store(req, res) {
-        Note.find({ userId: req.session.user.id }).countDocuments().then(totalNote => {
+        Note.find({ userId: req.session.user.id }).countDocuments().then(totalNotes => {
             const formData = {
                 name: req.body.name,
                 description: req.body.description,
                 userId: req.session.user.id,
                 bookmark: 0,
-                sort_num: totalNote + 1
+                sort_num: totalNotes + 1
             }
             const note = new Note(formData)
             note.save()
@@ -150,7 +150,6 @@ class NoteController {
                 .catch(err => console.log(err))
         })
             .catch(err => console.log(err))
-
     }
 
     // [GET] /note/edit
@@ -191,18 +190,17 @@ class NoteController {
 
     // [POST] /notes/copy
     copy(req, res, next) {
-
         Promise.all([
             Note.find({ userId: req.session.user.id }).countDocuments(),
             Note.findById(req.params.id)
         ])
-            .then(([totalNote, note]) => {
+            .then(([totalNotes, note]) => {
                 const noteData = new Note({
-                    name: note.name,
+                    name: note.name + " - COPY",
                     description: note.description,
                     userId: req.session.user.id,
                     bookmark: 0,
-                    sort_num: totalNote + 1
+                    sort_num: totalNotes + 1
                 })
                 const noteItem = new Note(noteData)
                 noteItem.save()
@@ -279,11 +277,11 @@ class NoteController {
             Note.find({ userId: req.session.user.id, bookmark: 1 }),
             Note.countDocuments({ userId: req.session.user.id, bookmark: 1 })
         ])
-            .then(([notes, totalNote]) => {
+            .then(([notes, totalNotes]) => {
                 res.render('notes/bookmark',
                     {
                         notes: mutipleMongooseToObject(notes),
-                        totalNote
+                        totalNotes
                     }
                 )
             })
