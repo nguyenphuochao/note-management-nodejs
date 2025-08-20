@@ -42,7 +42,7 @@ a.btn-purple:hover {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
-    height: 50px;
+    height: auto;
 }
 
 .btn-export-csv:hover {
@@ -53,6 +53,5 @@ a.btn-purple:hover {
 @media screen and (max-width: 500px) {
     .text-truncate-line-clamp-2 {
         -webkit-line-clamp: 6;
-        height: auto;
     }
 }
