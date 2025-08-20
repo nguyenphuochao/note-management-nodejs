@@ -348,7 +348,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             <div class="modal-body">
-                <textarea class="form-control" style="border: 0;"></textarea>
+                ...
             </div>
         </div>
     </div>
@@ -513,17 +513,15 @@
             $("#modalShowContent").modal("show");
 
             var content = $(this).text();
-            $("#modalShowContent .modal-body textarea").html(content);
-            $("#modalShowContent .modal-body textarea").attr("rows", 2);
+            $("#modalShowContent .modal-body").html(content);
         })
 
         // Click column show desciption modal
         $("tbody tr td:nth-child(4) span").click(function () {
             $("#modalShowContent").modal("show");
 
-            var content = $(this).text();
-            $("#modalShowContent .modal-body textarea").html(content);
-            $("#modalShowContent .modal-body textarea").attr("rows", 20);
+            var content = $(this).html();
+            $("#modalShowContent .modal-body").html(content);
         })
     })
 </script>
