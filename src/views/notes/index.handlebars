@@ -161,7 +161,7 @@
                         <td scope="row">{{sum @index 1 }}</td>
                         <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
                         <td class="{{showColumn @root.isShowDesc}}"><span
-                                class="text-truncate-line-clamp-2">{{this.description}}</span></td>
+                                class="text-truncate-line-clamp-2">{{{this.description}}}</span></td>
                         <td class="{{showColumn @root.isShowBookmark}}">
                             <i class="{{bookmarkIcon this.bookmark}} fa-bookmark btn-bookmark fa-bookmark-{{this._id}}"
                                 data-bookmark="{{this.bookmark}}" data-id="{{this._id}}">
