@@ -341,7 +341,7 @@
 
 <!-- Modal show full content-->
 <div class="modal fade" id="modalShowContent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <button style="text-align: right;margin-right: 10px;" type="button" class="close" data-dismiss="modal"
                 aria-label="Close">
@@ -510,17 +510,17 @@
 
         // Click column show name modal
         $("tbody tr td:nth-child(3) span").click(function () {
-            $("#modalShowContent").modal("show");
-
             var content = $(this).text();
+            $("#modalShowContent").modal("show");
+            $("#modalShowContent .modal-dialog").removeClass("modal-lg");
             $("#modalShowContent .modal-body").html(content);
         })
 
         // Click column show desciption modal
         $("tbody tr td:nth-child(4) span").click(function () {
-            $("#modalShowContent").modal("show");
-
             var content = $(this).html();
+            $("#modalShowContent").modal("show");
+            $("#modalShowContent .modal-dialog").addClass("modal-lg");
             $("#modalShowContent .modal-body").html(content);
         })
     })
