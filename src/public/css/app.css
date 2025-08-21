@@ -24,6 +24,11 @@ a.btn-purple:hover {
     color: white;
 }
 
+.btn-export-csv:hover {
+    opacity: 0.8;
+    background-color: red;
+}
+
 .btn-edit,
 .btn-delete,
 .btn-copy,
@@ -43,11 +48,6 @@ a.btn-purple:hover {
     -webkit-line-clamp: 2;
     overflow: hidden;
     height: auto;
-}
-
-.btn-export-csv:hover {
-    opacity: 0.8;
-    background-color: red;
 }
 
 @media screen and (max-width: 500px) {
