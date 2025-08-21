@@ -116,7 +116,7 @@ app.engine('handlebars', engine({
             return isShow ? 'checked' : ''
         },
         checkInvalidShowData: (page, totalPage) => {
-            return page > totalPage && page > 1 ? true : false
+            return page > totalPage && page > 1
         },
         checkHasAvatar: (avatar) => {
             return avatar
