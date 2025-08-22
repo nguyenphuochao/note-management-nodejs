@@ -21,7 +21,7 @@
                 <tr>
                     <td scope="row">{{sum @index 1 }}</td>
                     <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
-                    <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
+                    <td><span class="text-truncate-line-clamp-2">{{{this.description}}}</span></td>
                     <td>{{vnFullFormat this.deletedAt}}</td>
                     <td>
                         <a href="#" class="btn btn-warning btn-sm btn-restore" data-id="{{this._id}}">
