@@ -1,3 +1,4 @@
+How to run project
 - git clone https://github.com/nguyenphuochao/note-management-nodejs.git
 - cd note-management-nodejs
 - npm install
