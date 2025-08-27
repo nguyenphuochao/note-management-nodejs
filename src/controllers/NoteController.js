@@ -274,7 +274,7 @@ class NoteController {
     // [GET] /notes/bookmark
     bookmarkList(req, res, next) {
         Promise.all([
-            Note.find({ userId: req.session.user.id, bookmark: 1 }),
+            Note.find({ userId: req.session.user.id, bookmark: 1 }).sort({ updatedAt: 'desc' }),
             Note.countDocuments({ userId: req.session.user.id, bookmark: 1 })
         ])
             .then(([notes, totalNotes]) => {

@@ -22,16 +22,19 @@
                     <tr>
                         <td scope="row">{{sum @index 1 }}</td>
                         <td><span class="text-truncate-line-clamp-2">{{this.name}}</span></td>
-                        <td><span class="text-truncate-line-clamp-2">{{this.description}}</span></td>
+                        <td><span class="text-truncate-line-clamp-2">{{{this.description}}}</span></td>
                         <td>{{vnFullFormat this.createdAt}}</td>
                         <td>{{vnFullFormat this.updatedAt}}</td>
                         <td style="width: 20%;">
-                            <a href="/notes/{{this._id}}/edit" class="btn btn-warning btn-sm" data-id="{{this._id}}">
+                            <a href="/notes/{{this._id}}/edit" class="btn btn-warning btn-sm btn-edit" data-id="{{this._id}}">
                                 <i class="fa-solid fa-pen-to-square"></i> Sửa
                             </a>
                             <a href="#" class="btn btn-success btn-sm btn-uncheck-bookmark" data-id="{{this._id}}">
                                 <i class="fa-solid fa-pen-to-square"></i> Bỏ đánh dấu
                             </a>
+                            {{!-- <a href="#" class="btn btn-danger btn-sm btn-delete" data-id="{{this._id}}">
+                                <i class="fa-solid fa-pen-to-square"></i> Xóa
+                            </a> --}}
                         </td>
                     </tr>
                     {{else}}
@@ -52,6 +55,21 @@
     </div>
 </div>
 
+<!-- Modal show full content-->
+<div class="modal fade" id="modalShowContent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <button style="text-align: right;margin-right: 10px;" type="button" class="close" data-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
 <form name="form-bookmark" method="POST"></form>
 
 <script>
@@ -69,6 +87,22 @@
             var id = $(this).data('id');
             formBookmark.action = '/notes/' + id + '/bookmark/uncheck?_method=PATCH';
             formBookmark.submit();
+        })
+
+        // Click column show name modal
+        $("tbody tr td:nth-child(2) span").click(function () {
+            var content = $(this).text();
+            $("#modalShowContent").modal("show");
+            $("#modalShowContent .modal-dialog").removeClass("modal-lg");
+            $("#modalShowContent .modal-body").html(content);
+        })
+
+        // Click column show desciption modal
+        $("tbody tr td:nth-child(3) span").click(function () {
+            var content = $(this).html();
+            $("#modalShowContent").modal("show");
+            $("#modalShowContent .modal-dialog").addClass("modal-lg");
+            $("#modalShowContent .modal-body").html(content);
         })
     });
 
