@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var btnSearch = $(".btn-search");
     var formSearch = $(".form-search");
 
+    const oldDescription = $("#oldDescription").text();
+    const btnUpdate = document.querySelector('.btn-update');
+
     // toggle search form
     btnSearch.click(function () {
         formSearch.slideToggle();
@@ -91,6 +94,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    
+
     // Integrate TinyMCE
     tinymce.init({
         selector: 'textarea#description',
@@ -106,6 +111,16 @@ document.addEventListener('DOMContentLoaded', function () {
             'removeformat | help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
         newline_behavior: 'linebreak',
+        setup: function (editor) {
+            editor.on('input', function () {
+                var myContent = tinymce.get("description").getContent({ format: 'text' });
+                if(myContent != oldDescription){
+                     btnUpdate.disabled = false;
+                } else {
+                    btnUpdate.disabled = true;
+                }
+            });
+        }
     });
 })
 

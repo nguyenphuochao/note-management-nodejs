@@ -1,4 +1,5 @@
 <div class="mt-5">
+
     <h2>Sửa ghi chú</h2>
 
     <form method="POST" action="/notes/{{note._id}}?_method=PUT">
@@ -6,16 +7,19 @@
             <label for="name">Tên ghi chú</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên ghi chú"
                 value="{{note.name}}" required>
+            <input type="hidden" value="{{note.name}}" id="oldName">
         </div>
 
         <div class="form-group">
             <label for="description">Mô tả</label>
             <textarea rows="20" class="form-control" name="description" id="description"
                 placeholder="Mô tả ghi chú">{{note.description}}</textarea>
+                
+            <div id="oldDescription" style="display: none">{{{note.description}}}</div>
         </div>
 
         <div class="form-group actions">
-            <button class="btn btn-primary btn-sm">Cập nhật</button>
+            <button class="btn btn-primary btn-sm btn-update" disabled>Cập nhật</button>
             <a href="/notes" class="btn btn-warning btn-sm">Quay về</a>
         </div>
 
@@ -25,4 +29,17 @@
 <script>
     // Update title
     document.title = "Quản lí ghi chú | Chỉnh sửa"
+
+    const btnUpdate = document.querySelector('.btn-update');
+    const name = document.getElementById('name');
+    const oldName = document.getElementById('oldName');
+
+    name.addEventListener('input', function () {
+        if (name.value != oldName.value) {
+            btnUpdate.disabled = false;
+        } else {
+            btnUpdate.disabled = true;
+        }
+    });
+
 </script>
