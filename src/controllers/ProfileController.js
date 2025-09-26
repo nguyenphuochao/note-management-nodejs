@@ -40,7 +40,7 @@ class ProfileController {
                 return res.redirect('/profile')
             }
 
-            if (passwordNew.length < 6) {
+            if (passwordNew && passwordNew.length < 6) {
                 // use session alert
                 req.session.message = {
                     type: 'danger',
