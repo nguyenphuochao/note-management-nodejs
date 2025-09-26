@@ -12,14 +12,13 @@
 
         <div class="form-group">
             <label for="description">Mô tả</label>
-            <textarea rows="20" class="form-control" name="description" id="description"
-                placeholder="Mô tả ghi chú">{{note.description}}</textarea>
-                
-            <div id="oldDescription" style="display: none">{{{note.description}}}</div>
+            <textarea rows="20" class="form-control" name="description" id="description" placeholder="Mô tả ghi chú">
+                {{note.description}}
+                </textarea>
         </div>
 
         <div class="form-group actions">
-            <button class="btn btn-primary btn-sm btn-update" disabled>Cập nhật</button>
+            <button class="btn btn-primary btn-sm btn-update">Cập nhật</button>
             <a href="/notes" class="btn btn-warning btn-sm">Quay về</a>
         </div>
 
@@ -27,19 +26,8 @@
 </div>
 
 <script>
+
     // Update title
     document.title = "Quản lí ghi chú | Chỉnh sửa"
-
-    const btnUpdate = document.querySelector('.btn-update');
-    const name = document.getElementById('name');
-    const oldName = document.getElementById('oldName');
-
-    name.addEventListener('input', function () {
-        if (name.value != oldName.value) {
-            btnUpdate.disabled = false;
-        } else {
-            btnUpdate.disabled = true;
-        }
-    });
 
 </script>

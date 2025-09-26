@@ -2,15 +2,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var btnSearch = $(".btn-search");
     var formSearch = $(".form-search");
 
-    const oldDescription = $("#oldDescription").text();
-    const btnUpdate = document.querySelector('.btn-update');
-
-    // toggle search form
+    // Toggle show/hide search form
     btnSearch.click(function () {
         formSearch.slideToggle();
     });
 
-    // validate form login
+    // Validate form login
     $(".login").validate({
         rules: {
             email: {
@@ -44,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // validate form register
+    // Validate form register
     $(".register").validate({
         rules: {
             fullname: {
@@ -94,9 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    
-
-    // Integrate TinyMCE
+    // Integrate TinyMCE Editor
     tinymce.init({
         selector: 'textarea#description',
         height: 500,
@@ -111,21 +106,10 @@ document.addEventListener('DOMContentLoaded', function () {
             'removeformat | help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
         newline_behavior: 'linebreak',
-        setup: function (editor) {
-            editor.on('input', function () {
-                var myContent = tinymce.get("description").getContent({ format: 'text' });
-                if(myContent != oldDescription){
-                     btnUpdate.disabled = false;
-                } else {
-                    btnUpdate.disabled = true;
-                }
-            });
-        }
     });
 })
 
-
-
+// Update param in url
 function getUpdatedParam(k, v) {
     var params = {};
     window.location.search
