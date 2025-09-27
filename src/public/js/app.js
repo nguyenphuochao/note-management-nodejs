@@ -1,10 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var btnSearch = $(".btn-search");
-    var formSearch = $(".form-search");
+    const btnSearch = $(".btn-search");
+    const formSearch = $(".form-search");
+    const btnBack = $(".btn-back");
 
     // Toggle show/hide search form
     btnSearch.click(function () {
         formSearch.slideToggle();
+    });
+
+    // Loads the previous URL in the history list
+    btnBack.click(function () {
+        history.back();
     });
 
     // Validate form login

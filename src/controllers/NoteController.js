@@ -183,7 +183,7 @@ class NoteController {
                     type: 'success',
                     title: 'Đã xóa ghi chú'
                 }
-                res.redirect('/notes')
+                res.redirect('back');
             })
             .catch(err => console.log(err))
     }
@@ -209,7 +209,7 @@ class NoteController {
                             type: 'success',
                             title: 'Đã copy ghi chú'
                         }
-                        res.redirect('/notes')
+                        res.redirect('back');
                     })
                     .catch(next)
             })
