@@ -18,7 +18,7 @@ app.use(session({
     secret: 'your_secret_key', // A strong, unique secret for signing the session ID cookie
     resave: false, // Don't save session if unmodified
     saveUninitialized: true, // Save new but uninitialized sessions
-    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // Set to true if using HTTPS in production
+    cookie: { secure: false, maxAge: 7 *24 * 60 * 60 * 1000 } // Set to true if using HTTPS in production
 }));
 
 // Define the cron schedule (e.g., runs every day at 2 AM)
